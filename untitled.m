@@ -421,13 +421,13 @@ function Tab3_Callback(hObject, eventdata, handles)
 function setVisibility(tab,handles,hObject)
 
     if (tab==1)
-        set(handles.axes1,'Visible','off');
+        set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','off');
         set(handles.main_panel,'Visible','on');
         set(handles.table_panel,'Visible','off'); 
         set(handles.alg_panel,'Visible','off');
     elseif (tab==2)
-        set(handles.axes1,'Visible','off');
+        set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','off');
         set(handles.main_panel,'Visible','off');
         set(handles.table_panel,'Visible','off');
