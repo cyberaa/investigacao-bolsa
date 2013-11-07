@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 07-Nov-2013 01:36:41
+% Last Modified by GUIDE v2.5 07-Nov-2013 09:49:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,17 +61,29 @@ guidata(hObject, handles);
 % UIWAIT makes untitled wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-%%FIXME FIXME!!!!!!!!
+%%%%
+%%  FIXME FIXME!!!!!!!!
+%%  FIXME FIXME!!!!!!!!
+%%  FIXME FIXME!!!!!!!!
+%%  FIXME FIXME!!!!!!!!
+%%  FIXME FIXME!!!!!!!!
+%%  FIXME FIXME!!!!!!!!
+%%%%
 data = rand(3);
 
 handles.algorithm1 = 0;
 handles.algorithm2 = 0;
-set(handles.table_panel,'Position', get(handles.main_panel,'Position'));
-set(handles.table,'Data',data);
-set(handles.table_panel,'Visible','off');
 
-% Update handles structure
-guidata(hObject, handles);
+%Load data into the table - FIXME this is temporary!
+set(handles.table,'Data',data);
+
+%Unpress all the buttons
+set(handles.alg_bt1,'Value',0);
+set(handles.alg_bt2,'Value',0);
+set(handles.dm_bt1,'Value',0);
+set(handles.dm_bt2,'Value',0);
+
+setVisibility(1,handles,hObject);
 
 
 
@@ -87,47 +99,16 @@ varargout{1} = handles.output;
 
 
 
-% --- Executes on button press in run_bt.
-function run_bt_Callback(hObject, eventdata, handles)
-% hObject    handle to run_bt (see GCBO)
+% --- Executes on button press in data_depur_bt.
+function data_depur_bt_Callback(hObject, eventdata, handles)
+% hObject    handle to data_depur_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-set(handles.axes1,'Visible','on');
-set(handles.axes2,'Visible','on');
+setVisibility(2,handles,hObject);%Advance to the second tab
 
 % Update handles structure
 guidata(hObject, handles);
-
-
-
-% --- Executes on button press in dm_bt1.
-function dm_bt1_Callback(hObject, eventdata, handles)
-% hObject    handle to dm_bt1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of dm_bt1
-    if ( (get(hObject,'Value') +  get(handles.dm_bt2,'Value') )== 2)%dm_bt1 and dm_bt2 are pressed simultaneously
-       set(handles.dm_bt2,'Value',0);%Unpress dm_bt2 
-       % Update handles structure
-       guidata(hObject, handles);
-    end
-
-
-
-% --- Executes on button press in dm_bt2.
-function dm_bt2_Callback(hObject, eventdata, handles)
-% hObject    handle to dm_bt2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of dm_bt2
-    if ( (get(hObject,'Value') +  get(handles.dm_bt2,'Value') ) == 2)%dm_bt1 and dm_bt2 are pressed simultaneously
-       set(handles.dm_bt1,'Value',0);%Unpress dm_bt1 
-       % Update handles structure
-       guidata(hObject, handles);
-    end
 
 
 
@@ -230,36 +211,6 @@ function file_text_CreateFcn(hObject, eventdata, handles)
 
 
 
-% --- Executes on button press in alg_bt1.
-function alg_bt1_Callback(hObject, eventdata, handles)
-% hObject    handle to alg_bt1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of alg_bt1
-    if ( get(hObject,'Value') == 1)
-        handles.algorithm1 = 1;
-        % Update handles structure
-        guidata(hObject, handles);
-    end
-
-
-
-% --- Executes on button press in alg_bt2.
-function alg_bt2_Callback(hObject, eventdata, handles)
-% hObject    handle to alg_bt2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of alg_bt2
-    if ( get(hObject,'Value') == 1)
-        handles.algorithm2 = 1;
-        % Update handles structure
-        guidata(hObject, handles);
-    end
-
-
-
 function par_text4_Callback(hObject, eventdata, handles)
 % hObject    handle to par_text4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -334,38 +285,128 @@ function par_text6_CreateFcn(hObject, eventdata, handles)
         set(hObject,'BackgroundColor','white');
     end
 
+% --- Executes on button press in alg_bt1.
+function alg_bt1_Callback(hObject, eventdata, handles)
+% hObject    handle to alg_bt1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of alg_bt1
+    if ( get(hObject,'Value') == 1)
+        handles.algorithm1 = 1;
+        % Update handles structure
+        guidata(hObject, handles);
+    end
 
 
-% --- Executes on button press in Tab1.
+% --- Executes on button press in alg_bt2.
+function alg_bt2_Callback(hObject, eventdata, handles)
+% hObject    handle to alg_bt2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of alg_bt2
+    if ( get(hObject,'Value') == 1)
+        handles.algorithm2 = 1;
+        % Update handles structure
+        guidata(hObject, handles);
+    end  
+    
+% --- Executes on button press in dm_bt1.
+function dm_bt1_Callback(hObject, eventdata, handles)
+% hObject    handle to dm_bt1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of dm_bt1
+
+    if ( get(hObject,'Value') == 1)
+        set(handles.dm_bt2,'Value',0);
+        % Update handles structure
+        guidata(hObject, handles);
+    end
+
+
+% --- Executes on button press in dm_bt2.
+function dm_bt2_Callback(hObject, eventdata, handles)
+% hObject    handle to dm_bt2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of dm_bt2 
+
+    if ( get(hObject,'Value') == 1)
+        set(handles.dm_bt1,'Value',0);
+        % Update handles structure
+        guidata(hObject, handles);
+    end
+    
+    
+function dest_file_text_Callback(hObject, eventdata, handles)
+% hObject    handle to dest_file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of dest_file_text as text
+%        str2double(get(hObject,'String')) returns contents of dest_file_text as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function dest_file_text_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to dest_file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function load_file_text_Callback(hObject, eventdata, handles)
+% hObject    handle to load_file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of load_file_text as text
+%        str2double(get(hObject,'String')) returns contents of load_file_text as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function load_file_text_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to load_file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in load_bt.
+function load_bt_Callback(hObject, eventdata, handles)
+% hObject    handle to load_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in Tab1.   
 function Tab1_Callback(hObject, eventdata, handles)
 % hObject    handle to Tab1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    set(handles.axes1,'Visible','off');
-    set(handles.axes2,'Visible','off');
-    set(handles.main_panel,'Visible','on');
-    set(handles.table_panel,'Visible','off');
-    
-    % Update handles structure
-    guidata(hObject, handles);
-
-
-
+    setVisibility(1,handles,hObject);
 
 % --- Executes on button press in Tab2.
 function Tab2_Callback(hObject, eventdata, handles)
 % hObject    handle to Tab2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    set(handles.axes1,'Visible','on');
-    set(handles.axes2,'Visible','on');
-    set(handles.main_panel,'Visible','off');
-    set(handles.table_panel,'Visible','on');
-    
-    % Update handles structure
-    guidata(hObject, handles);
-
+    setVisibility(2,handles,hObject);
 
 
 % --- Executes on button press in Tab3.
@@ -373,3 +414,31 @@ function Tab3_Callback(hObject, eventdata, handles)
 % hObject    handle to Tab3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+    setVisibility(3,handles,hObject); 
+
+% --- Handles icon's visibility changes when the user is navigating through tabs
+function setVisibility(tab,handles,hObject)
+
+    if (tab==1)
+        set(handles.axes1,'Visible','off');
+        set(handles.axes2,'Visible','off');
+        set(handles.main_panel,'Visible','on');
+        set(handles.table_panel,'Visible','off'); 
+        set(handles.alg_panel,'Visible','off');
+    elseif (tab==2)
+        set(handles.axes1,'Visible','off');
+        set(handles.axes2,'Visible','off');
+        set(handles.main_panel,'Visible','off');
+        set(handles.table_panel,'Visible','off');
+        set(handles.alg_panel,'Visible','on');
+    elseif (tab==3)
+        set(handles.axes1,'Visible','on');
+        set(handles.axes2,'Visible','on');
+        set(handles.main_panel,'Visible','off');
+        set(handles.table_panel,'Visible','on');
+        set(handles.alg_panel,'Visible','off');
+    end
+    
+    % Update handles structure
+    guidata(hObject, handles);
