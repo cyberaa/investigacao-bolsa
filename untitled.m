@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 29-Oct-2013 18:03:11
+% Last Modified by GUIDE v2.5 07-Nov-2013 01:36:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,35 +52,6 @@ function untitled_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to untitled (see VARARGIN)
 
-%%%%
-%%  Data to plot
-%%%%
-
-ns=100;
-num_outliers=17;
-outlier_min=0.5;
-outlier_max=1.5;
-snd=1.5;
-window_size=10;
-
-series=generate_time_series2(ns);
-outliers=general_add_outliers(series, num_outliers,outlier_min,outlier_max);
-    
-[Y,band_low,band_high]=general_detect_outliers_linear(outliers,window_size,snd,1, 1:length(outliers));
-no_outliers=Y(1,:);
-[Ymedia,band_lowmedia,band_highmedia]=general_detect_outliers_linear(outliers,window_size,snd,0, 1:length(outliers));
-no_outliers_media=Ymedia(1,:);
-
-handles.outliers = outliers;
-handles.Alg2Linear = no_outliers;
-handles.Alg2LinearMean = no_outliers_media;
-handles.series = series;
-handles.band_low = band_low;
-handles.band_high = band_high;
-handles.band_lowmedia = band_lowmedia;
-handles.band_highmedia = band_highmedia;
-handles.print = 0;%By default
-
 % Choose default command line output for untitled
 handles.output = hObject;
 
@@ -89,6 +60,19 @@ guidata(hObject, handles);
 
 % UIWAIT makes untitled wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+
+%%FIXME FIXME!!!!!!!!
+data = rand(3);
+
+handles.algorithm1 = 0;
+handles.algorithm2 = 0;
+set(handles.table_panel,'Position', get(handles.main_panel,'Position'));
+set(handles.table,'Data',data);
+set(handles.table_panel,'Visible','off');
+
+% Update handles structure
+guidata(hObject, handles);
+
 
 
 % --- Outputs from this function are returned to the command line.
@@ -102,96 +86,290 @@ function varargout = untitled_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on selection change in popupmenu1.
-function popupmenu1_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu1 (see GCBO)
+
+% --- Executes on button press in run_bt.
+function run_bt_Callback(hObject, eventdata, handles)
+% hObject    handle to run_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu1
+set(handles.axes1,'Visible','on');
+set(handles.axes2,'Visible','on');
 
-val = get(hObject, 'Value');
-str = get(hObject, 'String');
+% Update handles structure
+guidata(hObject, handles);
 
-%%FIXME FIXME FIXME FIXME 
-switch str{val}
-    case 'Algorithm1'
-        handles.print = 1;
-    case 'Algorithm2'
-        handles.print = 1;
-    case 'Choose Algorithm'
-        handles.print = 0;
-end
-guidata(hObject,handles);
+
+
+% --- Executes on button press in dm_bt1.
+function dm_bt1_Callback(hObject, eventdata, handles)
+% hObject    handle to dm_bt1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of dm_bt1
+    if ( (get(hObject,'Value') +  get(handles.dm_bt2,'Value') )== 2)%dm_bt1 and dm_bt2 are pressed simultaneously
+       set(handles.dm_bt2,'Value',0);%Unpress dm_bt2 
+       % Update handles structure
+       guidata(hObject, handles);
+    end
+
+
+
+% --- Executes on button press in dm_bt2.
+function dm_bt2_Callback(hObject, eventdata, handles)
+% hObject    handle to dm_bt2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of dm_bt2
+    if ( (get(hObject,'Value') +  get(handles.dm_bt2,'Value') ) == 2)%dm_bt1 and dm_bt2 are pressed simultaneously
+       set(handles.dm_bt1,'Value',0);%Unpress dm_bt1 
+       % Update handles structure
+       guidata(hObject, handles);
+    end
+
+
+
+function par_text1_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text1 as text
+%        str2double(get(hObject,'String')) returns contents of par_text1 as a double
+
+
 
 % --- Executes during object creation, after setting all properties.
-function popupmenu1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu1 (see GCBO)
+function par_text1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
 
 
-% --- Executes on button press in runAlgorithms.
-function runAlgorithms_Callback(hObject, eventdata, handles)
-% hObject    handle to runAlgorithms (see GCBO)
+
+
+function par_text2_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text2 as text
+%        str2double(get(hObject,'String')) returns contents of par_text2 as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function par_text2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+
+function par_text3_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text3 as text
+%        str2double(get(hObject,'String')) returns contents of par_text3 as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function par_text3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+
+function file_text_Callback(hObject, eventdata, handles)
+% hObject    handle to file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of file_text as text
+%        str2double(get(hObject,'String')) returns contents of file_text as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function file_text_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to file_text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+% --- Executes on button press in alg_bt1.
+function alg_bt1_Callback(hObject, eventdata, handles)
+% hObject    handle to alg_bt1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of alg_bt1
+    if ( get(hObject,'Value') == 1)
+        handles.algorithm1 = 1;
+        % Update handles structure
+        guidata(hObject, handles);
+    end
+
+
+
+% --- Executes on button press in alg_bt2.
+function alg_bt2_Callback(hObject, eventdata, handles)
+% hObject    handle to alg_bt2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of alg_bt2
+    if ( get(hObject,'Value') == 1)
+        handles.algorithm2 = 1;
+        % Update handles structure
+        guidata(hObject, handles);
+    end
+
+
+
+function par_text4_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text4 as text
+%        str2double(get(hObject,'String')) returns contents of par_text4 as a double
+
+
+
+
+% --- Executes during object creation, after setting all properties.
+function par_text4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+
+function par_text5_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text5 as text
+%        str2double(get(hObject,'String')) returns contents of par_text5 as a double
+
+
+
+
+% --- Executes during object creation, after setting all properties.
+function par_text5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+function par_text6_Callback(hObject, eventdata, handles)
+% hObject    handle to par_text6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of par_text6 as text
+%        str2double(get(hObject,'String')) returns contents of par_text6 as a double
+
+
+
+
+% --- Executes during object creation, after setting all properties.
+function par_text6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to par_text6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+
+% --- Executes on button press in Tab1.
+function Tab1_Callback(hObject, eventdata, handles)
+% hObject    handle to Tab1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    set(handles.axes1,'Visible','off');
+    set(handles.axes2,'Visible','off');
+    set(handles.main_panel,'Visible','on');
+    set(handles.table_panel,'Visible','off');
     
-cla reset;%Reset plot
-
-if (handles.print == 1)
-    plot(handles.axes1,handles.outliers,'b');   
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.Alg2Linear,'--r');
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.Alg2LinearMean,'-.k');
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.series,'g');
-    hold(handles.axes1,'on');
-    %{
-    plot(handles.axes1,handles.band_low, 'r');
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.band_high, 'r');
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.band_lowmedia, 'black');
-    hold(handles.axes1,'on');
-    plot(handles.axes1,handles.band_highmedia, 'black');
-    hold(handles.axes1,'on');
-    %}
-    leng = legend(handles.axes1,'Series W/Outliers', 'Series W/O Outliers (Linear)' ,'Series W/O Outliers (Mean)', 'Original Series');
-    %Make legend movable : set(leng, 'XColor', 'w', 'YColor', 'w', 'Color', 'none');
-end
+    % Update handles structure
+    guidata(hObject, handles);
 
 
-% --- Executes on selection change in popupmenu2.
-function popupmenu2_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu2 (see GCBO)
+
+
+% --- Executes on button press in Tab2.
+function Tab2_Callback(hObject, eventdata, handles)
+% hObject    handle to Tab2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    set(handles.axes1,'Visible','on');
+    set(handles.axes2,'Visible','on');
+    set(handles.main_panel,'Visible','off');
+    set(handles.table_panel,'Visible','on');
+    
+    % Update handles structure
+    guidata(hObject, handles);
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu2
 
 
-%%FIXME FIXME FIXME WHAT TO DO HERE??
-
-
-
-% --- Executes during object creation, after setting all properties.
-function popupmenu2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu2 (see GCBO)
+% --- Executes on button press in Tab3.
+function Tab3_Callback(hObject, eventdata, handles)
+% hObject    handle to Tab3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+% handles    structure with handles and user data (see GUIDATA)
