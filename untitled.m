@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 07-Nov-2013 09:49:02
+% Last Modified by GUIDE v2.5 15-Nov-2013 18:49:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -69,19 +69,16 @@ guidata(hObject, handles);
 %%  FIXME FIXME!!!!!!!!
 %%  FIXME FIXME!!!!!!!!
 %%%%
-data = rand(3);
+
+
+
+data = [28 6 0.30 4.00 2.01 504.40 23.30;38 5.22 0.30 3.98 1.90 401.30 21.50];
 
 handles.algorithm1 = 0;
 handles.algorithm2 = 0;
 
 %Load data into the table - FIXME this is temporary!
 set(handles.table,'Data',data);
-
-%Unpress all the buttons
-set(handles.alg_bt1,'Value',0);
-set(handles.alg_bt2,'Value',0);
-set(handles.dm_bt1,'Value',0);
-set(handles.dm_bt2,'Value',0);
 
 setVisibility(1,handles,hObject);
 
@@ -422,23 +419,281 @@ function setVisibility(tab,handles,hObject)
 
     if (tab==1)
         set(handles.axes1,'Visible','on');
-        set(handles.axes2,'Visible','off');
-        set(handles.main_panel,'Visible','on');
+        set(handles.axes2,'Visible','on');
+        set(handles.axes3,'Visible','off');
+        set(handles.go_bt,'Visible','on');
+        
+        set(handles.file_io_panel,'Visible','on');
+        set(handles.miss_values_panel,'Visible','on');
+        set(handles.resampling_panel,'Visible','on');
+        set(handles.time_series_info_panel,'Visible','on');
+        
+        set(handles.outlier_detection_panel,'Visible','off');
+        set(handles.result_analysis_panel,'Visible','off');
+        
         set(handles.table_panel,'Visible','off'); 
-        set(handles.alg_panel,'Visible','off');
     elseif (tab==2)
         set(handles.axes1,'Visible','on');
-        set(handles.axes2,'Visible','off');
-        set(handles.main_panel,'Visible','off');
+        set(handles.axes2,'Visible','on');
+        set(handles.axes3,'Visible','off');
+        set(handles.go_bt,'Visible','off');
+        
+        set(handles.file_io_panel,'Visible','off');
+        set(handles.miss_values_panel,'Visible','off');
+        set(handles.resampling_panel,'Visible','off');
+        set(handles.time_series_info_panel,'Visible','off');
+        
+        set(handles.outlier_detection_panel,'Visible','on');
+        set(handles.result_analysis_panel,'Visible','on');
+        
         set(handles.table_panel,'Visible','off');
-        set(handles.alg_panel,'Visible','on');
     elseif (tab==3)
         set(handles.axes1,'Visible','on');
-        set(handles.axes2,'Visible','on');
-        set(handles.main_panel,'Visible','off');
+        set(handles.axes2,'Visible','off');
+        set(handles.axes3,'Visible','on');
+        set(handles.go_bt,'Visible','off');
+        
+        set(handles.file_io_panel,'Visible','off');
+        set(handles.miss_values_panel,'Visible','off');
+        set(handles.resampling_panel,'Visible','off');
+        set(handles.time_series_info_panel,'Visible','off');
+        
+        set(handles.outlier_detection_panel,'Visible','off');
+        set(handles.result_analysis_panel,'Visible','off');
+        
         set(handles.table_panel,'Visible','on');
-        set(handles.alg_panel,'Visible','off');
     end
     
     % Update handles structure
     guidata(hObject, handles);
+
+
+% --- Executes on button press in go_bt.
+function go_bt_Callback(hObject, eventdata, handles)
+% hObject    handle to go_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+function edit12_Callback(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit12 as text
+%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit13_Callback(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit13 as text
+%        str2double(get(hObject,'String')) returns contents of edit13 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit13_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit14_Callback(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit14 as text
+%        str2double(get(hObject,'String')) returns contents of edit14 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit14_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in checkbox7.
+function checkbox7_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox7
+
+
+% --- Executes on button press in checkbox6.
+function checkbox6_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox6
+
+
+% --- Executes on selection change in popupmenu3.
+function popupmenu3_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu3 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu3
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in checkbox12.
+function checkbox12_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox12
+
+
+% --- Executes on button press in checkbox13.
+function checkbox13_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox13
+
+
+% --- Executes on button press in checkbox16.
+function checkbox16_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox16
+
+
+% --- Executes on button press in checkbox8.
+function checkbox8_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox8
+
+
+% --- Executes on button press in checkbox9.
+function checkbox9_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox9
+
+
+% --- Executes on button press in checkbox10.
+function checkbox10_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox10
+
+
+% --- Executes on button press in checkbox11.
+function checkbox11_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox11
+
+
+% --- Executes on button press in pushbutton14.
+function pushbutton14_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton15.
+function pushbutton15_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton15 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton16.
+function pushbutton16_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton17.
+function pushbutton17_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in accommodate_bt.
+function accommodate_bt_Callback(hObject, eventdata, handles)
+% hObject    handle to accommodate_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in checkbox17.
+function checkbox17_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox17
+
+
+% --- Executes on button press in pushbutton20.
+function pushbutton20_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
