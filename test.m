@@ -1,7 +1,7 @@
 t=(0:500)';
 
-data=generate_series(t);
-%data = generate_time_series(500,-1,1,500,-0.25,0.25);
+%data=generate_series(t);
+data = generate_time_series(-1,1,length(t),-5,5);  data = data';
 %data = generate_time_series2(501);
 
 data_miss = add_missing(data, 0.10);
