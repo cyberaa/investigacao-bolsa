@@ -1,3 +1,10 @@
+%%%%
+% Compare two time series using different methods.
+% diffseries shall hold a vector with the differences betweent he two
+% series (data-data2)
+% quaddiff shall hold the euclidian distance between the series
+% complexdiff shall hve the complex-invariant distance between the series
+%%%%
 function [diffseries, quaddiff, complexdiff] = compare_series(data, data2)
     diffseries = data-data2;
     quaddiff = sum(diffseries.^2);

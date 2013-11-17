@@ -1,3 +1,7 @@
+%%%%
+% Plot the original data, outlier data and accomodated data in a pretty
+% fashion.
+%%%%
 function plot_outlier_data(t,data,outlier_data,outliers,data_fixed, dL, dH)
     hold off;            
     

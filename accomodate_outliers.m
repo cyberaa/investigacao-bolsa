@@ -1,11 +1,34 @@
 %%%%
-%% Detect and fix outliers. Given a source X, with a given number of
-%% oversampling samples and a desired number of final samples.
-%% snd is the SND (Standard Normal Deviation) used to detect the outliers
-%%
-%% We return a vector with two rows. The first contains the samples (which
-%% may be fixed). The second highlights where we had to fix it (1 means we
-%% detected and fixed an outlier)
+% Detect and fix outliers using a windowing scheme (with or without
+% overlap)
+%
+% INPUT:
+%      t: Time values
+%      data: Input series (with possible outliers)
+%      w_size: Window size (in samples)
+%      w_overlap: Window overlap (in samples)
+%      snd: Standard Normal Deviation used for the methods (Typical values: 1.5,
+%      2.0, 2.5, 3.0...)
+%      model: 1 --> Linear Model; 0 --> Mean/Average model
+%
+% OUTPUT:
+%      data_fix: Output time series, with accomodated/fixed values
+%      detected: Vector which indicates where outliers were found (and
+%      accomodated). 0 means not found, 1 means found
+%      dL, dH: Lower and Higher values of the bands used in the detection
+%      of the outliers. Use this for plotting the bands.
+%
+%
+% This uses a window of size w_size with overlap w_overlap. It then models
+% the data in the window either with a constant model (model=0) or linear
+% one (linear regression, model=1) and compares all the values in that
+% window to their expected values. It admits differences in a range give by
+% the SND (Standard Normal Deviation). Note that if there are many
+% outliers, or if they are very significant (very 'outliery'), our models
+% are skewed and may thus not only fail to detect the outlier, but also
+% treat legitimate data as outliers. This happens because we aren't using
+% robust methods.
+%
 %%%%
 function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overlap,snd, model)
     data_fix=zeros(length(data),1);

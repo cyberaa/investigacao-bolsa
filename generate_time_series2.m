@@ -1,5 +1,6 @@
 %%%%
-%% Generate a random time series with n samples
+% Generate a random time series with n samples
+% This is METHOD 1
 %%%%
 function series=generate_time_series2(n) 
 
