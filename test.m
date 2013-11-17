@@ -44,6 +44,7 @@ fprintf('Complex Invariant Distance: %.2f\n', complexdiff);
 
 figure(2);
 plot_outlier_data(t,data_fix,data_outliers,outlier_locations,data_fix_outliers,dL,dH);
+
 [diffseries_o, quaddiff_o,complexdiff_o] = compare_series(data_fix, data_outliers);
 
 fprintf('------------------- WITH OUTLIERS -------------------\n');
@@ -56,6 +57,6 @@ legend('Data - Accomodated', 'Data - Outliers');
 title('Filling missing data');
 
 figure(4);
-plot(t,data_fix, t,data);
+plot(t+round(0.01*length(t)/2),data_fix_outliers, t,data,'r');
 legend('Accomodated Data', 'Original data');
 title('Accomodated versus Original data');
