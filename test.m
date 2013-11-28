@@ -16,7 +16,7 @@ title('Filling missing data');
 
 [data_outliers,outlier_locations]=add_outliers(data, 0.15,std(data)*1.15,std(data)*1.15);
 
-[data_fix_outliers,outliers,dL,dH] = accomodate_outliers(t,data_outliers,round(0.01*length(t)),round(0.01*length(t))-1,0.8,0);
+[data_fix_outliers,outliers,dL,dH] = accomodate_outliers(t,data_outliers,round(0.01*length(t)),round(0.01*length(t))-1,0.85,4);
 
 fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
 
@@ -57,6 +57,7 @@ legend('Data - Accomodated', 'Data - Outliers');
 title('Filling missing data');
 
 figure(4);
-plot(t+round(0.01*length(t)/2),data_fix_outliers, t,data,'r');
+%plot(t+round(0.01*length(t)/2),data_fix_outliers, t,data,'r');
+plot(t,data_fix_outliers, t,data,'r');
 legend('Accomodated Data', 'Original data');
 title('Accomodated versus Original data');
