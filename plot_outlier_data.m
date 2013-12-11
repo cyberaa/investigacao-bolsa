@@ -3,7 +3,7 @@
 % fashion.
 %%%%
 function plot_outlier_data(t,data,outlier_data,outliers,data_fixed, dL, dH)
-    hold off;            
+    hold off;
     
     n = outliers==1;
     outlier_data = outlier_data(n);

@@ -63,11 +63,17 @@ function untitled_OpeningFcn(hObject, eventdata, handles, varargin)
 %%%%
 
 
-
-data = [28 6 0.30 4.00 2.01 504.40 23.30;38 5.22 0.30 3.98 1.90 401.30 21.50];
+%FIXME: This next lines of code are just here for testing purposes, since
+%we arent loading files dynamically into the workspace. Therefore, and to
+%have something to show our mentors, we are going to "simulate" the data.
+handles.t=(0:500)';
+data = generate_time_series(-1,1,length(handles.t),-5,5);
+handles.data = data';
+handles.data_miss = add_missing(handles.data, 0.10);
+%data = [28 6 0.30 4.00 2.01 504.40 23.30;38 5.22 0.30 3.98 1.90 401.30 21.50];
 
 %Load data into the table - FIXME this is temporary!
-set(handles.table,'Data',data);
+%set(handles.table,'Data',handles.data);
 
 setVisibility(1,handles,hObject);
 
@@ -242,6 +248,13 @@ function go_bt_Callback(hObject, eventdata, handles)
 % hObject    handle to go_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+    %Do Prepocessing!
+    handles.data_fix = fix_missing(handles.t,handles.data_miss);
+    %Plot the data
+    plot(handles.axes1,handles.t,handles.data,handles.t,handles.data_miss,handles.t,handles.data_fix,'--');
+    legend(handles.axes1,'Original', 'Missing', 'Fixed');
+    title(handles.axes1,'Filling missing data');
 
 
 
@@ -429,6 +442,12 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
 % hObject    handle to accommodate_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+  
+
+    [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handes.data)*1.15);
+    [data_fix_outliers,outliers,dL,dH] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,4);
+
+    fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
     
     % Update handles structure
     guidata(hObject, handles);
