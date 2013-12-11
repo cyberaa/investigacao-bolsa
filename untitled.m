@@ -254,7 +254,9 @@ function go_bt_Callback(hObject, eventdata, handles)
     %Plot the data
     plot(handles.axes1,handles.t,handles.data,handles.t,handles.data_miss,handles.t,handles.data_fix,'--');
     legend(handles.axes1,'Original', 'Missing', 'Fixed');
-    title(handles.axes1,'Filling missing data');
+    title(handles.axes1,'Filling missing data');   
+    % Update handles structure
+    guidata(hObject, handles);
 
 
 
@@ -444,10 +446,34 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
   
 
-    [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handes.data)*1.15);
+    [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
     [data_fix_outliers,outliers,dL,dH] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,4);
 
     fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
+    
+    plot_data(hObject,handles,outlier_locations,data_fix_outliers,dL,dH);
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+   
+function plot_data(hObject,handles,outliers,data_fixed,dL,dH)
+
+    hold off;
+    
+    n = outliers == 1;
+    handles.data_outliers = handles.data_outliers(n);
+    t_outlier = handles.t(n);
+    
+    plot(handles.axes2,t_outlier,handles.data_outliers,'r.');
+    hold on;
+    plot(handles.axes2,handles.t,handles.data_fix, 'b');
+    plot(handles.axes2,handles.t,data_fixed, 'g-.');
+    plot(handles.axes2,handles.t,dL,'k');
+    plot(handles.axes2,handles.t,dH,'k');
+    hold off;
+    legend(handles.axes2,'Outliers', 'Original', 'Accomodated');
+    title(handles.axes2,'Outlier Detection and Accomodation');
     
     % Update handles structure
     guidata(hObject, handles);
