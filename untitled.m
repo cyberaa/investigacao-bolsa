@@ -463,16 +463,10 @@ function plot_data(hObject,handles,outliers,data_fixed,dL,dH)
     
     n = outliers == 1;
     handles.data_outliers = handles.data_outliers(n);
-    t_outlier = handles.t(n);
-    
-    plot(handles.axes2,t_outlier,handles.data_outliers,'r.');
+    t_outlier = handles.t(n);    
+    plot(handles.axes2,t_outlier,handles.data_outliers,'r.',handles.t,handles.data_fix, 'b',handles.t,data_fixed,'g-.',handles.t,dL,'k',handles.t,dH,'c');
     hold on;
-    plot(handles.axes2,handles.t,handles.data_fix, 'b');
-    plot(handles.axes2,handles.t,data_fixed, 'g-.');
-    plot(handles.axes2,handles.t,dL,'k');
-    plot(handles.axes2,handles.t,dH,'k');
-    hold off;
-    legend(handles.axes2,'Outliers', 'Original', 'Accomodated');
+    legend(handles.axes2,'Outliers', 'Original', 'Accomodated','Upper Limit','Lower Limit');
     title(handles.axes2,'Outlier Detection and Accomodation');
     
     % Update handles structure
