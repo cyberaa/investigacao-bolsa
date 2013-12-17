@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 30-Nov-2013 13:19:05
+% Last Modified by GUIDE v2.5 17-Dec-2013 11:45:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,10 +78,12 @@ handles.data_miss = add_missing(handles.data, 0.10);
 setVisibility(1,handles,hObject);
 
 %Reset the methods
+handles.model = [];
+
 handles.iqr=0;
 handles.modifiedzscore=0;
 handles.grubbs=0;
-handles.hampel=0;
+handles.mad=0;
 handles.snd=0;
 
 handles.resampleData = 0;
@@ -249,12 +251,31 @@ function go_bt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
+    %%%
+    %%  FIXME
+    %%%
+    numberOutliers = 35;
+    minV = min(handles.data);
+    maxV = max(handles.data);
+    meanV = mean(handles.data); 
+    stdV = std(handles.data);
+
     %Do Prepocessing!
     handles.data_fix = fix_missing(handles.t,handles.data_miss);
     %Plot the data
     plot(handles.axes1,handles.t,handles.data,handles.t,handles.data_miss,handles.t,handles.data_fix,'--');
     legend(handles.axes1,'Original', 'Missing', 'Fixed');
-    title(handles.axes1,'Filling missing data');   
+    title(handles.axes1,'Filling missing data'); 
+    
+    set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
+    set(handles.mean,'String', ['Mean: ' num2str(meanV)]);
+    set(handles.std,'String', ['Standard Deviation: ' num2str(stdV)]);
+    set(handles.minValue,'String',['Miniimum Value: ' num2str(minV)]);
+    set(handles.maxValue,'String',['Maximum Value: ' num2str(maxV)]);
+    
+    
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -384,8 +405,8 @@ function iqrcheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of iqrcheckbox
-    handles.iqr = handles.iqr + 1;
-    handles.iqr = mod(handles.iqr,2);
+    handles.model = [handles.model 2];
+    handles.iqr = mod((handles.iqr + 1),2);
     % Update handles structure
     guidata(hObject, handles);
 
@@ -397,20 +418,21 @@ function sndcheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of sndcheckbox
-    handles.snd = handles.snd + 1;
-    handles.snd = mod(handles.snd,2);
+    handles.model = [handles.model 1];
+    handles.snd = mod((handles.snd + 1),2);
     % Update handles structure
     guidata(hObject, handles);
 
-% --- Executes on button press in hampelcheckbox.
-function hampelcheckbox_Callback(hObject, eventdata, handles)
-% hObject    handle to hampelcheckbox (see GCBO)
+% --- Executes on button press in madcheckbox.
+function madcheckbox_Callback(hObject, eventdata, handles)
+% hObject    handle to madcheckbox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of hampelcheckbox
-    handles.hampel = handles.hampel + 1;
-    handles.hampel = mod(handles.hampel,2);
+% Hint: get(hObject,'Value') returns toggle state of madcheckbox
+    
+    handles.model = [handles.model 5];
+    handles.mad = mod((handles.mad + 1),2);
     % Update handles structure
     guidata(hObject, handles);
 
@@ -421,8 +443,8 @@ function gurbbscheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of gurbbscheckbox
-    handles.grubbs = handles.grubbs + 1;
-    handles.grubbs = mod(handles.grubbs,2);
+    handles.model = [handles.model 3];
+    handles.grubbs = mod((handles.grubbs + 1),2);
     % Update handles structure
     guidata(hObject, handles);
     
@@ -433,8 +455,8 @@ function mzscorecheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of mzscorecheckbox
-    handles.modifiedzscore = handles.modifiedzscore + 1;
-    handles.modifiedzscore = mod(handles.modifiedzscore,2);
+    handles.model = [handles.model 4];
+    handles.modifiedzscore = mod((handles.modifiedzscore + 1),2);
     % Update handles structure
     guidata(hObject, handles);
 
@@ -444,10 +466,13 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
 % hObject    handle to accommodate_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-  
 
+    %%%
+    %%  FIXME FIXME FIXME CORRIGIR FORMA COMO CHAMAMOS O ACCOMODATE_OUTLIERS E COMO FAZEMOS O PLOT DOS DADOS??? PODEMOS TER ATE 5 GRAFICOS DIFERENTES
+    %%  PARA FAZER!!!
+    %%%
     [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
-    [data_fix_outliers,outliers,dL,dH] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,4);
+    [data_fix_outliers,outliers,dL,dH] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(1));
 
     fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
     
@@ -471,40 +496,7 @@ function plot_data(hObject,handles,outliers,data_fixed,dL,dH)
     
     % Update handles structure
     guidata(hObject, handles);
-    
-% --- Executes on button press in iqrButton.
-function iqrButton_Callback(hObject, eventdata, handles)
-% hObject    handle to iqrButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in sndButton.
-function sndButton_Callback(hObject, eventdata, handles)
-% hObject    handle to sndButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in hampelButton.
-function hampelButton_Callback(hObject, eventdata, handles)
-% hObject    handle to hampelButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in grubbsButton.
-function grubbsButton_Callback(hObject, eventdata, handles)
-% hObject    handle to grubbsButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in modifiedZScoreButton.
-function modifiedZScoreButton_Callback(hObject, eventdata, handles)
-% hObject    handle to modifiedZScoreButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)    
+     
     
 % --- Handles icon's visibility changes when the user is navigating through tabs
 function setVisibility(tab,handles,hObject)
