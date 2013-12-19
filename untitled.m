@@ -255,7 +255,7 @@ function go_bt_Callback(hObject, eventdata, handles)
     %%%
     %%  FIXME
     %%%
-    numberOutliers = 35;
+    numberOutliers = 35;%FIXME HERE
     minV = min(handles.data);
     maxV = max(handles.data);
     meanV = mean(handles.data); 
@@ -405,8 +405,12 @@ function iqrcheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of iqrcheckbox
-    handles.model = [handles.model 2];
+    
     handles.iqr = mod((handles.iqr + 1),2);
+    if (handles.iqr == 1)
+        handles.model = [handles.model 2];
+    end
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -418,8 +422,12 @@ function sndcheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of sndcheckbox
-    handles.model = [handles.model 1];
+    
     handles.snd = mod((handles.snd + 1),2);
+    if (handles.snd == 1)
+        handles.model = [handles.model 1];
+    end
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -431,8 +439,11 @@ function madcheckbox_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of madcheckbox
     
-    handles.model = [handles.model 5];
     handles.mad = mod((handles.mad + 1),2);
+    if (handles.mad == 1)
+        handles.model = [handles.model 5];
+    end
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -443,8 +454,12 @@ function gurbbscheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of gurbbscheckbox
-    handles.model = [handles.model 3];
+    
     handles.grubbs = mod((handles.grubbs + 1),2);
+    if (handles.grubbs == 1)
+        handles.model = [handles.model 3];
+    end
+    
     % Update handles structure
     guidata(hObject, handles);
     
@@ -455,8 +470,12 @@ function mzscorecheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of mzscorecheckbox
-    handles.model = [handles.model 4];
+    
     handles.modifiedzscore = mod((handles.modifiedzscore + 1),2);
+    if (handles.modifiedzscore == 1)
+        handles.model = [handles.model 4];
+    end
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -472,26 +491,48 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
     %%  PARA FAZER!!!
     %%%
     [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
-    [data_fix_outliers,outliers,dL,dH] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(1));
-
-    fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
     
-    plot_data(hObject,handles,outlier_locations,data_fix_outliers,dL,dH);
+    outlier_locations = outlier_locations';
+    
+    data_fix_outliers = zeros(length(handles.model),length(handles.data));
+    outliers = zeros(length(handles.model),length(handles.data));
+    dL = zeros(length(handles.model),length(handles.data));
+    dH = zeros(length(handles.model),length(handles.data));
+    
+    for i=1:length(handles.model)
+        [data_fix_outliers(i,:),outliers(i,:),dL(i,:),dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+    end
+    
+    fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
+    
+    for i=1:length(handles.model)
+        plot_data(hObject,handles,data_fix_outliers(i,:),dL(i,:),dH(i,:));
+        %legend
+    end
     
     % Update handles structure
     guidata(hObject, handles);
     
    
-function plot_data(hObject,handles,outliers,data_fixed,dL,dH)
+function plot_data(hObject,handles,data_fixed,dL,dH)
 
     hold off;
     
-    n = outliers == 1;
-    handles.data_outliers = handles.data_outliers(n);
-    t_outlier = handles.t(n);    
-    plot(handles.axes2,t_outlier,handles.data_outliers,'r.',handles.t,handles.data_fix, 'b',handles.t,data_fixed,'g-.',handles.t,dL,'k',handles.t,dH,'c');
+    %handles.data_outliers = handles.data_outliers(n);
+    data_outliers = handles.data_outliers';
+    %t_outlier = handles.t(n);    
+    t_outlier = handles.t;
+    
+    fprintf('Aqui ---------------------------------------\n');
+    size(t_outlier)
+    size(data_outliers)
+    size(data_fixed)
+    size(dL)
+    size(dH)
+    
+    plot(handles.axes2,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.',t_outlier,data_fixed,'g-.',t_outlier,dL,'k',t_outlier,dH,'c');
     hold on;
-    legend(handles.axes2,'Outliers', 'Original', 'Accomodated','Upper Limit','Lower Limit');
+    legend(handles.axes2,'Outliers', 'Original','Accomodated','Lower Limit','Upper Limit');
     title(handles.axes2,'Outlier Detection and Accomodation');
     
     % Update handles structure
