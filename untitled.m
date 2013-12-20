@@ -70,6 +70,7 @@ handles.t=(0:500)';
 data = generate_time_series(-1,1,length(handles.t),-5,5);
 handles.data = data';
 handles.data_miss = add_missing(handles.data, 0.10);
+[handles.data_outliers,handles.outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
 %data = [28 6 0.30 4.00 2.01 504.40 23.30;38 5.22 0.30 3.98 1.90 401.30 21.50];
 
 %Load data into the table - FIXME this is temporary!
@@ -77,16 +78,17 @@ handles.data_miss = add_missing(handles.data, 0.10);
 
 setVisibility(1,handles,hObject);
 
-%Reset the methods
-handles.model = [];
+handles.model = [];%Stores the methods chosen by the user
+handles.plotReferences = [];%Stores the plots computed by the GUI
 
+%User decision in terms of algorithms and data resampling
 handles.iqr=0;
 handles.modifiedzscore=0;
 handles.grubbs=0;
 handles.mad=0;
 handles.snd=0;
-
 handles.resampleData = 0;
+
 
 % Choose default command line output for untitled
 handles.output = hObject;
@@ -253,7 +255,7 @@ function go_bt_Callback(hObject, eventdata, handles)
 
 
     %%%
-    %%  FIXME
+    %%  FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME 
     %%%
     numberOutliers = 35;%FIXME HERE
     minV = min(handles.data);
@@ -264,8 +266,8 @@ function go_bt_Callback(hObject, eventdata, handles)
     %Do Prepocessing!
     handles.data_fix = fix_missing(handles.t,handles.data_miss);
     %Plot the data
-    plot(handles.axes1,handles.t,handles.data,handles.t,handles.data_miss,handles.t,handles.data_fix,'--');
-    legend(handles.axes1,'Original', 'Missing', 'Fixed');
+    plot(handles.axes1,handles.t,handles.data,'--',handles.t,handles.data_miss,'--',handles.t,handles.data_fix,'--',handles.t,handles.data_outliers,'--');
+    legend(handles.axes1,'Original', 'Missing', 'Fixed','Outliers');
     title(handles.axes1,'Filling missing data'); 
     
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
@@ -273,8 +275,6 @@ function go_bt_Callback(hObject, eventdata, handles)
     set(handles.std,'String', ['Standard Deviation: ' num2str(stdV)]);
     set(handles.minValue,'String',['Miniimum Value: ' num2str(minV)]);
     set(handles.maxValue,'String',['Maximum Value: ' num2str(maxV)]);
-    
-    
     
     % Update handles structure
     guidata(hObject, handles);
@@ -409,6 +409,8 @@ function iqrcheckbox_Callback(hObject, eventdata, handles)
     handles.iqr = mod((handles.iqr + 1),2);
     if (handles.iqr == 1)
         handles.model = [handles.model 2];
+    elseif (ismember(2,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(find(handles.model ~= 2));
     end
     
     % Update handles structure
@@ -426,6 +428,8 @@ function sndcheckbox_Callback(hObject, eventdata, handles)
     handles.snd = mod((handles.snd + 1),2);
     if (handles.snd == 1)
         handles.model = [handles.model 1];
+    elseif (ismember(1,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(find(handles.model ~= 1));
     end
     
     % Update handles structure
@@ -442,6 +446,8 @@ function madcheckbox_Callback(hObject, eventdata, handles)
     handles.mad = mod((handles.mad + 1),2);
     if (handles.mad == 1)
         handles.model = [handles.model 5];
+        elseif (ismember(5,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(find(handles.model ~= 5));
     end
     
     % Update handles structure
@@ -458,6 +464,8 @@ function gurbbscheckbox_Callback(hObject, eventdata, handles)
     handles.grubbs = mod((handles.grubbs + 1),2);
     if (handles.grubbs == 1)
         handles.model = [handles.model 3];
+    elseif (ismember(3,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(find(handles.model ~= 3));
     end
     
     % Update handles structure
@@ -474,6 +482,8 @@ function mzscorecheckbox_Callback(hObject, eventdata, handles)
     handles.modifiedzscore = mod((handles.modifiedzscore + 1),2);
     if (handles.modifiedzscore == 1)
         handles.model = [handles.model 4];
+    elseif (ismember(4,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(find(handles.model ~= 4));
     end
     
     % Update handles structure
@@ -485,15 +495,8 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
 % hObject    handle to accommodate_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-    %%%
-    %%  FIXME FIXME FIXME CORRIGIR FORMA COMO CHAMAMOS O ACCOMODATE_OUTLIERS E COMO FAZEMOS O PLOT DOS DADOS??? PODEMOS TER ATE 5 GRAFICOS DIFERENTES
-    %%  PARA FAZER!!!
-    %%%
-    [handles.data_outliers,outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
     
-    outlier_locations = outlier_locations';
-    
+    outlier_locations = handles.outlier_locations';
     data_fix_outliers = zeros(length(handles.model),length(handles.data));
     outliers = zeros(length(handles.model),length(handles.data));
     dL = zeros(length(handles.model),length(handles.data));
@@ -504,40 +507,42 @@ function accommodate_bt_Callback(hObject, eventdata, handles)
     end
     
     fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
+
+    %Plot the results of the Outlier accommodation methods used
+    plotData(hObject,handles,data_fix_outliers,dL,dH);
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+
+% --- Plots the results of the Outlier's accommodation methods applied, as selected by the user
+function plotData(hObject,handles,data_fix_outliers,dL,dH)     
+
+    data_outliers = handles.data_outliers';
+    t_outlier = handles.t;   
+    
+    handles.plotReferences = [];
+
+    %Reset the axes
+    cla(handles.axes2);
+
+    % Update handles structure
+    guidata(hObject, handles);
+
+    %Plot the data
+    plot(handles.axes2,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.');
+    title(handles.axes2,'Outlier Detection and Accomodation');
+    hold(handles.axes2,'on');
     
     for i=1:length(handles.model)
-        plot_data(hObject,handles,data_fix_outliers(i,:),dL(i,:),dH(i,:));
-        %legend
+        %Plot the data
+        plot(handles.axes2,handles.t,data_fix_outliers(i,:),'g.',handles.t,dL(i,:),'b',handles.t,dH(i,:),'b');
+        legend(handles.axes2,'Outliers','Original','Accommodated','Lower Limit','Upper Limit');        
+        hold(handles.axes2,'on');
     end
-    
-    % Update handles structure
-    guidata(hObject, handles);
-    
-   
-function plot_data(hObject,handles,data_fixed,dL,dH)
 
-    hold off;
-    
-    %handles.data_outliers = handles.data_outliers(n);
-    data_outliers = handles.data_outliers';
-    %t_outlier = handles.t(n);    
-    t_outlier = handles.t;
-    
-    fprintf('Aqui ---------------------------------------\n');
-    size(t_outlier)
-    size(data_outliers)
-    size(data_fixed)
-    size(dL)
-    size(dH)
-    
-    plot(handles.axes2,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.',t_outlier,data_fixed,'g-.',t_outlier,dL,'k',t_outlier,dH,'c');
-    hold on;
-    legend(handles.axes2,'Outliers', 'Original','Accomodated','Lower Limit','Upper Limit');
-    title(handles.axes2,'Outlier Detection and Accomodation');
-    
     % Update handles structure
     guidata(hObject, handles);
-     
     
 % --- Handles icon's visibility changes when the user is navigating through tabs
 function setVisibility(tab,handles,hObject)
