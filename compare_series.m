@@ -5,9 +5,10 @@
 % quaddiff shall hold the euclidian distance between the series
 % complexdiff shall hve the complex-invariant distance between the series
 %%%%
-function [diffseries, quaddiff, complexdiff] = compare_series(data, data2)
+function [diffseries, quaddiff, complexdiff, absdiff] = compare_series(data, data2)
     diffseries = data-data2;
     quaddiff = sum(diffseries.^2);
+    absdiff = sum(abs(data-data2));
     
     CE_Q = sqrt(sum(diff(data).^2));
     CE_C = sqrt(sum(diff(data2).^2));

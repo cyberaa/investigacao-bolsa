@@ -14,9 +14,9 @@ plot(t,data,t,data_miss,t,data_fix,'--');
 legend('Original', 'Missing', 'Fixed');
 title('Filling missing data');
 
-[data_outliers,outlier_locations]=add_outliers(data, 0.15,std(data)*1.15,std(data)*1.15);
+[data_outliers,outlier_locations]=add_outliers(data, 0.05,std(data)*1.15,std(data)*1.15);
 
-[data_fix_outliers,outliers,dL,dH] = accomodate_outliers(t,data_outliers,round(0.01*length(t)),round(0.01*length(t))-1,0.85,4);
+[data_fix_outliers,outliers,dL,dH] = accomodate_outliers(t,data_outliers,round(0.1*length(t)),round(0.1*length(t))-1,1.25,6);
 
 fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(outliers));
 
@@ -35,21 +35,23 @@ fprintf('Negative Predictive Rate: %.2f%%\n', 100.0*TN/(TN+FN));
 
 fprintf('F-Measure: %f\n', 2*precision*recall / (precision+recall));
 
-[diffseries, quaddiff,complexdiff] = compare_series(data_fix, data_fix_outliers);
+[diffseries, quaddiff,complexdiff, absdiff] = compare_series(data_fix, data_fix_outliers);
 
 fprintf('-------------------- ACCOMODATED --------------------\n');
 fprintf('Euclidian Distance: %.2f\n', quaddiff);
 fprintf('Complex Invariant Distance: %.2f\n', complexdiff);
+fprintf('Abs Distance: %.2f\n', absdiff);
 
 
 figure(2);
 plot_outlier_data(t,data_fix,data_outliers,outlier_locations,data_fix_outliers,dL,dH);
 
-[diffseries_o, quaddiff_o,complexdiff_o] = compare_series(data_fix, data_outliers);
+[diffseries_o, quaddiff_o,complexdiff_o, absdiff_o] = compare_series(data_fix, data_outliers);
 
 fprintf('------------------- WITH OUTLIERS -------------------\n');
 fprintf('Euclidian Distance (with Outliers): %.2f\n', quaddiff_o);
 fprintf('Complex Invariant Distance (with Outliers): %.2f\n', complexdiff_o);
+fprintf('Abs Distance: %.2f\n', absdiff_o);
 
 figure(3);
 plot(t,diffseries,t,diffseries_o);
