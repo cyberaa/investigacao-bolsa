@@ -71,7 +71,6 @@ data = generate_time_series(-1,1,length(handles.t),-5,5);
 handles.data = data';
 handles.data_miss = add_missing(handles.data, 0.10);
 [handles.data_outliers,handles.outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
-%data = [28 6 0.30 4.00 2.01 504.40 23.30;38 5.22 0.30 3.98 1.90 401.30 21.50];
 
 %Load data into the table - FIXME this is temporary!
 %set(handles.table,'Data',handles.data);
@@ -81,13 +80,14 @@ setVisibility(1,handles,hObject);
 handles.model = [];%Stores the methods chosen by the user
 handles.plotReferences = [];%Stores the plots computed by the GUI
 
-%User decision in terms of algorithms and data resampling
+%User decision in terms of algorithms and data resampling and filling missing values
 handles.iqr=0;
 handles.modifiedzscore=0;
 handles.grubbs=0;
 handles.mad=0;
 handles.snd=0;
 handles.resampleData = 0;
+handles.fillMissing = 0;
 
 
 % Choose default command line output for untitled
@@ -263,12 +263,26 @@ function go_bt_Callback(hObject, eventdata, handles)
     meanV = mean(handles.data); 
     stdV = std(handles.data);
 
-    %Do Prepocessing!
-    handles.data_fix = fix_missing(handles.t,handles.data_miss);
-    %Plot the data
-    plot(handles.axes1,handles.t,handles.data,'--',handles.t,handles.data_miss,'--',handles.t,handles.data_fix,'--',handles.t,handles.data_outliers,'--');
-    legend(handles.axes1,'Original', 'Missing', 'Fixed','Outliers');
+    %Start ploting the data
+    %Reset the axes
+    cla(handles.axes1);
+
+    plot(handles.axes1,handles.t,handles.data,'--',handles.t,handles.data_miss,'--',handles.t,handles.data_outliers,'--');
     title(handles.axes1,'Filling missing data'); 
+    hold(handles.axes1,'on');
+
+    %Do Prepocessing!
+    if (handles.fillMissing == 1)
+        %Count the missing values
+        set(handles.missValsCountText,'String',['Missing Value Count: ' num2str(sum(isnan(handles.data_miss)))]);
+
+        handles.data_fix = fix_missing(handles.t,handles.data_miss);
+        plot(handles.axes1,handles.t,handles.data_fix,'--');
+        legend(handles.axes1,'Original', 'Missing', 'Outliers','Fixed');
+        hold(handles.axes1,'on');
+    else
+        legend(handles.axes1,'Original', 'Missing', 'Outliers');
+    end
     
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
     set(handles.mean,'String', ['Mean: ' num2str(meanV)]);
@@ -326,13 +340,17 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in fillmissingcheckbox.
+% --- Executes on button press in
 function fillmissingcheckbox_Callback(hObject, eventdata, handles)
 % hObject    handle to fillmissingcheckbox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of fillmissingcheckbox
+
+    handles.fillMissing = mod(handles.fillMissing+1,2);
+    % Update handles structure
+    guidata(hObject, handles);
 
 
 % --- Executes on selection change in linearmenu.
