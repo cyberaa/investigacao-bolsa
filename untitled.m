@@ -75,14 +75,10 @@ function varargout = untitled(varargin)
     handles.dL = [];
     handles.dH = [];
 
-    handles.model = [];%Stores the methods chosen by the user
     handles.plotReferences = [];%Stores the plots computed by the GUI
-    handles.metrics = [];%Stores the metrics used to compare the results obtained with different methods
 
     %Load data into the table - FIXME this is temporary!
     %set(handles.table,'Data',handles.data);
-
-    setVisibility(1,handles,hObject);
 
     %User decision in terms of algorithms and data resampling and filling missing values
     handles.iqr=0;
@@ -92,13 +88,19 @@ function varargout = untitled(varargin)
     handles.snd=0;
     handles.resampleData = 0;
     handles.fillMissing = 0;
+    handles.model = [];%Stores the methods chosen by the user
+    handles.metrics = [];%Stores the metrics to compare the results, selected by the user
+    handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
 
     %User selected metrics to compare results
     handles.euclidean=0;
     handles.differenceToOriginal=0;
     handles.complexTimeInvariant=0;
-
-
+    
+    %Show the main tab
+    setVisibility(1,handles,hObject);
+    
+    
     % Choose default command line output for untitled
     handles.output = hObject;
 
@@ -282,7 +284,7 @@ function go_bt_Callback(hObject, ~, handles)
     %Reset the axes
     cla(handles.axes1);
 
-    plot(handles.axes1,handles.t,handles.data,'b--',handles.t,handles.data_miss,'g--',handles.t,handles.data_outliers,'m--');
+    plot(handles.axes1,handles.t,handles.data,'b--',handles.t,handles.data_miss,'g--',handles.t,handles.data_outliers,'c--');
     title(handles.axes1,'Collected Data'); 
     hold(handles.axes1,'on');
     
@@ -298,10 +300,10 @@ function go_bt_Callback(hObject, ~, handles)
 
         handles.data_fix = fix_missing(handles.t,handles.data_miss);
         plot(handles.axes1,handles.t,handles.data_fix,'--');
-        legend(handles.axes1,'Original', 'Missing','Outliers','Fixed');
+        legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected','Series With Outliers','Series With Missing Values Fixed');
         hold(handles.axes1,'on');
     else
-        legend(handles.axes1,'Original', 'Missing', 'Outliers');
+        legend(handles.axes1,'Original Series', 'Series With Missing Values', 'Series With Outliers');
     end
     
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
@@ -444,7 +446,7 @@ function differencecheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of differencecheckbox
     handles.differenceToOriginal=mod((handles.differenceToOriginal+1),2);
-    if (handles.euclidean == 1)
+    if (handles.differenceToOriginal == 1)
         handles.metrics = [handles.metrics 2];
     elseif (ismember(2,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
         handles.metrics = handles.metrics(handles.metrics ~= 2);
@@ -462,7 +464,7 @@ function complextimecheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of complextimecheckbox
     handles.complexTimeInvariant=mod((handles.complexTimeInvariant+1),2);
-    if (handles.euclidean == 1)
+    if (handles.complexTimeInvariant == 1)
         handles.metrics = [handles.metrics 3];
     elseif (ismember(3,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
         handles.metrics = handles.metrics(handles.metrics ~= 3);
@@ -578,54 +580,105 @@ function accommodate_bt_Callback(hObject, ~, handles)
     
     for i=1:length(handles.model)
         [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+        handles.results(i,1) = sum(outliers(i,:));
+        handles.results(i,2) = max(handles.data_fix_outliers(i,:));
+        handles.results(i,3) = min(handles.data_fix_outliers(i,:));
+        handles.resuts(i,4) = mean(handles.data_fix_outliers(i,:));
+        handles.results(i,5) = std(handles.data_fix_outliers(i,:)); 
+        
+        handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};   
+        
+        %Now we will compute the metric's comparison
+        for j=1:length(handles.metrics)
+            if (handles.metrics(j) == 1)
+                handles.cnames{length(handles.cnames)+1} = 'Euclidean';
+                handles.results(i,length(handles.cnames)) = sqrt(sum((handles.data_outliers'-handles.data_fix_outliers).^2));                
+            
+            elseif (handles.metrics(j) == 2)
+                handles.cnames{length(handles.cnames)+1} = 'Difference';
+                handles.results(i,length(handles.cnames)) = sqrt(sum(abs(handles.data_outliers'-handles.data_fix_outliers)));                
+            
+            else
+                handles.cnames{length(handles.cnames)+1} = 'Comp Time-Invariant';
+            end
+        end
     end
     
+    
     fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
-    
-    
-    %%  FIXME FALTA FAZER A PARTE DAS METRICAS
 
     %Plot the results of the Outlier accommodation methods used
-    plotData(hObject,handles);
+    plotData(hObject,handles,2);
+    
+    %%%
+    %% Get methods - For now this will stay here... Maybe we could do this on the callback function where we select each method, however it would be
+    %%               more difficult to implement this. Same goes to the metrics
+    %%%
+    handles.methodsName = {};
+    for i=1:length(handles.model)
+        if (handles.model(i) == 2)
+            handles.methodsName{length(handles.methodsName)+1} = 'IQR Method';
+        elseif (handles.model(i) == 0)
+            handles.methodsName{length(handles.methodsName)+1} = 'SND Method';
+        elseif (handles.model(i) == 4)
+            handles.methodsName{length(handles.methodsName)+1} = 'Modified Z-Score';
+        elseif (handles.model(i) == 5)
+            handles.methodsName{length(handles.methodsName)+1} = 'MAD Test';
+        else
+            handles.methodsName{length(handles.methodsName)+1} = 'Grubbs Test';
+        end
+    end
+    
+    %Update Table with metrics
+    set(handles.table,'data',handles.results,'ColumnName',handles.cnames,'RowName',handles.methodsName);
     
     % Update handles structure
     guidata(hObject, handles);
     
 
 % --- Plots the results of the Outlier's accommodation methods applied, as selected by the user
-function plotData(hObject,handles)     
+function plotData(hObject,handles,axesNumber)     
 
     data_outliers = handles.data_outliers';
     t_outlier = handles.t;   
     
     handles.plotReferences = [];
-
+    
+    if (axesNumber == 2)
+        axesHandler = handles.axes2;
+    elseif (axesNumber == 3)
+        axesHandler = handles.axes3;
+    end
+        
     %Reset the axes
-    cla(handles.axes2);
+    cla(axesHandler);
 
     % Update handles structure
     guidata(hObject, handles);
 
     %Plot the data
-    plot(handles.axes2,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.');
-    title(handles.axes2,'Outlier Detection and Accomodation');
-    hold(handles.axes2,'on');
+    plot(axesHandler,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.');
+    title(axesHandler,'Outlier Detection and Accomodation');
+    hold(axesHandler,'on');
     
     for i=1:length(handles.model)
         %Plot the data
-        plot(handles.axes2,handles.t,handles.data_fix_outliers(i,:),handles.t,handles.dL(i,:),handles.t,handles.dH(i,:));
-        legend(handles.axes2,'Outliers','Original','Accommodated','Lower Limit','Upper Limit');        
-        legend(handles.axes2,'show');
-        hold(handles.axes2,'on');
+        plot(axesHandler,handles.t,handles.data_fix_outliers(i,:),handles.t,handles.dL(i,:),handles.t,handles.dH(i,:));
+        legend(axesHandler,'Outliers','Original','Accommodated','Lower Limit','Upper Limit');        
+        legend(axesHandler,'show');
+        hold(axesHandler,'on');
     end
 
     % Update handles structure
-    guidata(hObject, handles);
+    guidata(hObject, handles);    
     
 % --- Handles icon's visibility changes when the user is navigating through tabs
 function setVisibility(tab,handles,hObject)
-
     if (tab==1)
+        %Clear Axes3
+        cla(handles.axes3);
+        legend(handles.axes3,'hide');
+        
         set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','on');
         set(handles.axes3,'Visible','off');
@@ -643,10 +696,14 @@ function setVisibility(tab,handles,hObject)
         
         if ( isempty(handles.model) == 0 )
             legend(handles.axes2,'show');
-            plotData(hObject,handles);
+            plotData(hObject,handles,2);
         end
         
     elseif (tab==2)
+        %Clear Axes3
+        cla(handles.axes3);
+        legend(handles.axes3,'hide');
+        
         set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','on');
         set(handles.axes3,'Visible','off');
@@ -664,7 +721,7 @@ function setVisibility(tab,handles,hObject)
         
         if ( isempty(handles.model) == 0 )
             legend(handles.axes2,'show');
-            plotData(hObject,handles);
+            plotData(hObject,handles,2);
         end
         
     elseif (tab==3)
@@ -686,6 +743,11 @@ function setVisibility(tab,handles,hObject)
         set(handles.result_analysis_panel,'Visible','off');
         
         set(handles.table_panel,'Visible','on');
+        
+        if ( isempty(handles.model) == 0 )           
+            plotData(hObject,handles,3);
+            legend(handles.axes3,'show');
+        end
     end
     
     % Update handles structure
