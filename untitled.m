@@ -578,6 +578,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
     handles.dL = zeros(length(handles.model),length(handles.data));
     handles.dH = zeros(length(handles.model),length(handles.data));
     
+    handles.results = [];%%FIXME 
+    
     for i=1:length(handles.model)
         [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
         handles.results(i,1) = sum(outliers(i,:));
@@ -586,20 +588,24 @@ function accommodate_bt_Callback(hObject, ~, handles)
         handles.resuts(i,4) = mean(handles.data_fix_outliers(i,:));
         handles.results(i,5) = std(handles.data_fix_outliers(i,:)); 
         
-        handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};   
+        handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
+
+        [diffseries, quaddiff, complexdiff, absdiff] = compare_series(handles.data_outliers',handles.data_fix_outliers(i,:));
         
         %Now we will compute the metric's comparison
         for j=1:length(handles.metrics)
+            
             if (handles.metrics(j) == 1)
                 handles.cnames{length(handles.cnames)+1} = 'Euclidean';
-                handles.results(i,length(handles.cnames)) = sqrt(sum((handles.data_outliers'-handles.data_fix_outliers).^2));                
+                handles.results(i,length(handles.cnames)) = quaddiff; 
             
             elseif (handles.metrics(j) == 2)
                 handles.cnames{length(handles.cnames)+1} = 'Difference';
-                handles.results(i,length(handles.cnames)) = sqrt(sum(abs(handles.data_outliers'-handles.data_fix_outliers)));                
+                handles.results(i,length(handles.cnames)) = sum(abs(diffseries));%%FIXME MAXI, NAO PODEMOS TER UM VECTOR
             
             else
                 handles.cnames{length(handles.cnames)+1} = 'Comp Time-Invariant';
+                handles.results(i,length(handles.cnames)) = complexdiff;
             end
         end
     end
