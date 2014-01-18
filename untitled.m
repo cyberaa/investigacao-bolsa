@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 17-Dec-2013 11:45:55
+% Last Modified by GUIDE v2.5 18-Jan-2014 00:52:35
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -88,6 +88,7 @@ function varargout = untitled(varargin)
     handles.snd=0;
     handles.resampleData = 0;
     handles.fillMissing = 0;
+    handles.parameters = [];%Stores the parameters selected by the user
     handles.model = [];%Stores the methods chosen by the user
     handles.metrics = [];%Stores the metrics to compare the results, selected by the user
     handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
@@ -130,33 +131,98 @@ function data_depur_bt_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
     setVisibility(2,handles,hObject);%Advance to the second tab
+    
 
-
-function file_text_Callback(hObject, eventdata, handles)
-% hObject    handle to file_text (see GCBO)
+% --- Executes on button press in inputFile_bt.
+function inputFile_bt_Callback(hObject, ~, handles)
+% hObject    handle to inputFile_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of file_text as text
-%        str2double(get(hObject,'String')) returns contents of file_text as a double
+    [filename, pathname] = uigetfile({'*'},'File Selector');
+    fullpathname = strcat(pathname,filename); 
+    %[num,txt,raw] = xlsread(fullpathname)
+  
+    % Update handles structure
+    guidata(hObject, handles);
 
 
-
-% --- Executes during object creation, after setting all properties.
-function file_text_CreateFcn(hObject, ~, handles)
-% hObject    handle to file_text (see GCBO)
+% --- Executes on button press in outputFile_bt.
+function outputFile_bt_Callback(hObject, ~, handles)
+% hObject    handle to outputFile_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+% handles    structure with handles and user data (see GUIDATA)
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
+    % Update handles structure
+    guidata(hObject, handles);
+    
+    
+% --- Executes on button press in iqrButton
+function iqrButton_Callback(hObject,~,handles)
+% hObject    handle to outputFile_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters = untitled2();%Open the window
+    
+    close(handles.parameters(1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
     
+% --- Executes on button press in sndButton
+function sndButton_Callback(hObject,~,handles)
+% hObject    handle to outputFile_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters = untitled2();%Open the window
+    
+    close(handles.parameters(1));%Close it
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+% --- Executes on button press in modifiedZScoreButton
+function modifiedZScoreButton_Callback(hObject,~,handles)
+% hObject    handle to outputFile_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters = untitled2();%Open the window
+    
+    close(handles.parameters(1));%Close it
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+    
+% --- Executes on button press in madButton.
+function madButton_Callback(hObject, eventdata, handles)
+% hObject    handle to madButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters = untitled2();%Open the window
+    
+    close(handles.parameters(1));%Close it
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+% --- Executes on button press in grubbsButton
+function grubbsButton_Callback(hObject,~,handles)
+% hObject    handle to outputFile_bt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters = untitled2();%Open the window
+    
+    close(handles.parameters(1));%Close it
+    
+    % Update handles structure
+    guidata(hObject, handles);
+ 
     
 function samplingPeriodText_Callback(hObject, eventdata, handles)
 % hObject    handle to samplingPeriodText (see GCBO)
@@ -181,63 +247,6 @@ function samplingPeriodText_CreateFcn(hObject, ~, handles)
     
     % Update handles structure
     guidata(hObject, handles);
-
-% --- Executes on button press in alg_bt1.
-function alg_bt1_Callback(hObject, ~, handles)
-% hObject    handle to alg_bt1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of alg_bt1
-    if ( get(hObject,'Value') == 1)
-        handles.algorithm1 = 1;
-        % Update handles structure
-        guidata(hObject, handles);
-    end
-
-
-% --- Executes on button press in alg_bt2.
-function alg_bt2_Callback(hObject, ~, handles)
-% hObject    handle to alg_bt2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of alg_bt2
-    if ( get(hObject,'Value') == 1)
-        handles.algorithm2 = 1;
-        % Update handles structure
-        guidata(hObject, handles);
-    end  
-    
-% --- Executes on button press in dm_bt1.
-function dm_bt1_Callback(hObject, ~, handles)
-% hObject    handle to dm_bt1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of dm_bt1
-
-    if ( get(hObject,'Value') == 1)
-        set(handles.dm_bt2,'Value',0);
-        % Update handles structure
-        guidata(hObject, handles);
-    end
-
-
-% --- Executes on button press in dm_bt2.
-function dm_bt2_Callback(hObject, ~, handles)
-% hObject    handle to dm_bt2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of dm_bt2 
-
-    if ( get(hObject,'Value') == 1)
-        set(handles.dm_bt1,'Value',0);
-        % Update handles structure
-        guidata(hObject, handles);
-    end
-
 
 % --- Executes on button press in Tab1.   
 function Tab1_Callback(hObject, ~, handles)
@@ -314,58 +323,7 @@ function go_bt_Callback(hObject, ~, handles)
     
     % Update handles structure
     guidata(hObject, handles);
-
-
-
-function inputfile_Callback(hObject, eventdata, handles)
-% hObject    handle to inputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of inputfile as text
-%        str2double(get(hObject,'String')) returns contents of inputfile as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function inputfile_CreateFcn(hObject, ~, handles)
-% hObject    handle to inputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
-    
-    % Update handles structure
-    guidata(hObject, handles);
-
-
-
-function outputfile_Callback(hObject, eventdata, handles)
-% hObject    handle to outputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of outputfile as text
-%        str2double(get(hObject,'String')) returns contents of outputfile as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function outputfile_CreateFcn(hObject, ~, handles)
-% hObject    handle to outputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
-
-    % Update handles structure
-    guidata(hObject, handles);
+  
 
 % --- Executes on button press in
 function fillmissingcheckbox_Callback(hObject, ~, handles)
@@ -581,7 +539,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
     handles.results = [];%%FIXME 
     
     for i=1:length(handles.model)
-        [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+        %[handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+        [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,handles.parameters(3),handles.parameters(4),handles.parameters(2),handles.model(i));
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
         handles.results(i,3) = min(handles.data_fix_outliers(i,:));
