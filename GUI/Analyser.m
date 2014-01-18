@@ -61,7 +61,7 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     %%  FIXME FIXME!!!!!!!!
     %%  FIXME FIXME!!!!!!!!
     %%%%
-
+    add_paths();
 
     %FIXME: This next lines of code are just here for testing purposes, since
     %we arent loading files dynamically into the workspace. Therefore, and to
@@ -144,23 +144,23 @@ function inputFile_bt_Callback(hObject, ~, handles)
 % hObject    handle to inputFile_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-    %%%
-    %%  FIXME FIXME FIXME
-    %%%
-
     [filename, pathname] = uigetfile({'*.xls;*.xlsx', 'Microsfot Excel File (*.xls,*.xlsx)';'*.csv','Comma Sperated Value (*.csv)' },'Choose a File');
-    fullpathname = strcat(pathname,filename); 
+    fullpathname = [pathname filename];
     
-    [path file ext] = fileparts(filename);
+    [status,t, data] = get_data_from_file(fullpathname);
     
-    if (strcmp(ext,'.csv'))
-        %MAXI LE COM CSV
-        
+    if status == 0
+        %HOOUVE UM ERRO. JOCA FIXME
     else
-        [num,txt,raw] = xlsread(fullpathname);
+        handles.t = t;    
+        handles.data_outliers = data;
+        
+        cla(handles.axes1);
+        plot(handles.axes1,t,data,'b');
+        title(handles.axes1,'Collected Data'); 
+        legend(handles.axes1,'Original Series');
     end
-  
+    
     % Update handles structure
     guidata(hObject, handles);
 
@@ -602,7 +602,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
 
-        [diffseries, quaddiff, complexdiff, absdiff] = compare_series(handles.data_outliers',handles.data_fix_outliers(i,:));
+        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_outliers',handles.data_fix_outliers(i,:));
         
         %Now we will compute the metric's comparison
         for j=1:length(handles.metrics)
@@ -613,7 +613,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             
             elseif (handles.metrics(j) == 2)
                 handles.cnames{length(handles.cnames)+1} = 'Difference';
-                handles.results(i,length(handles.cnames)) = sum(abs(diffseries));%%FIXME MAXI, NAO PODEMOS TER UM VECTOR
+                handles.results(i,length(handles.cnames)) = absdiff;
             
             else
                 handles.cnames{length(handles.cnames)+1} = 'Comp Time-Invariant';
