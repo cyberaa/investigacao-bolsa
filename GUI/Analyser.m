@@ -153,7 +153,7 @@ function inputFile_bt_Callback(hObject, ~, handles)
         %HOOUVE UM ERRO. JOCA FIXME
     else
         handles.t = t;    
-        handles.data_outliers = data;
+        handles.data_miss = data;
         
         cla(handles.axes1);
         plot(handles.axes1,t,data,'b');
@@ -323,7 +323,7 @@ function go_bt_Callback(hObject, ~, handles)
     %Reset the axes
     cla(handles.axes1);
 
-    plot(handles.axes1,handles.t,handles.data,'b--',handles.t,handles.data_miss,'g--',handles.t,handles.data_outliers,'c--');
+    plot(handles.axes1,handles.t,handles.data_miss,'b--');
     title(handles.axes1,'Collected Data'); 
     hold(handles.axes1,'on');
     
@@ -338,11 +338,11 @@ function go_bt_Callback(hObject, ~, handles)
         set(handles.missValsCountText,'String',['Missing Value Count: ' num2str(sum(isnan(handles.data_miss)))]);
 
         handles.data_fix = fix_missing(handles.t,handles.data_miss);
-        plot(handles.axes1,handles.t,handles.data_fix,'--');
-        legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected','Series With Outliers','Series With Missing Values Fixed');
+        plot(handles.axes1,handles.t,handles.data_fix,'r--');
+        legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected');
         hold(handles.axes1,'on');
     else
-        legend(handles.axes1,'Original Series', 'Series With Missing Values', 'Series With Outliers');
+        legend(handles.axes1,'Original Series');
     end
     
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
