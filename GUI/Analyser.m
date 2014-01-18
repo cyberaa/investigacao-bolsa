@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 18-Jan-2014 14:47:52
+% Last Modified by GUIDE v2.5 18-Jan-2014 19:40:32
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -104,12 +104,20 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     setVisibility(1,handles,hObject);
     
     %Hide sampling period boxes
-    set(handles.newSamplingPeriodText,'Visible','off');
-    set(handles.samplingPeriodText,'Visible','off');
+    
+        set(handles.missValsCountText,'enable','off');
+        set(handles.methodText,'enable','off');
+        set(handles.resampleDataCheckbox,'enable','off');        
+        set(handles.linearmenu,'enable','off'); 
+        
+    set(handles.newSamplingPeriodText,'enable','off');
+    set(handles.samplingPeriodText,'enable','off');  
     
     
     % Choose default command line output for Analyser
     handles.output = hObject;
+    
+    handles.data_miss = handles.data_outliers;
 
     % Update handles structure
     guidata(hObject, handles);
@@ -365,6 +373,18 @@ function fillmissingcheckbox_Callback(hObject, ~, handles)
 % Hint: get(hObject,'Value') returns toggle state of fillmissingcheckbox
 
     handles.fillMissing = mod(handles.fillMissing+1,2);
+    if (handles.fillMissing)
+        set(handles.missValsCountText,'enable','on');
+        set(handles.methodText,'enable','on');
+        set(handles.resampleDataCheckbox,'enable','on');        
+        set(handles.linearmenu,'enable','on'); 
+    else
+        set(handles.missValsCountText,'enable','off');
+        set(handles.methodText,'enable','off');
+        set(handles.resampleDataCheckbox,'enable','off');
+        set(handles.linearmenu,'enable','off'); 
+
+    end
     
     % Update handles structure
     guidata(hObject, handles);
@@ -414,11 +434,11 @@ function resampleDataCheckbox_Callback(hObject, ~, handles)
     handles.resampleData = mod(handles.resampleData,2);
     
     if (handles.resampleData) %Show text box to specify sampling period
-        set(handles.newSamplingPeriodText,'Visible','on');
-        set(handles.samplingPeriodText,'Visible','on');
+        set(handles.newSamplingPeriodText,'Enable','on');
+        set(handles.samplingPeriodText,'Enable','on');
     else %Hide the box
-        set(handles.newSamplingPeriodText,'Visible','off');
-        set(handles.samplingPeriodText,'Visible','off');
+        set(handles.newSamplingPeriodText,'Enable','off');
+        set(handles.samplingPeriodText,'Enable','off');
     end
     
     % Update handles structure
@@ -709,7 +729,7 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.file_io_panel,'Visible','on');
         set(handles.miss_values_panel,'Visible','on');
-        set(handles.resampling_panel,'Visible','on');
+        %set(handles.resampling_panel,'Visible','on');
         set(handles.time_series_info_panel,'Visible','on');
         
         set(handles.outlier_detection_panel,'Visible','off');
@@ -734,7 +754,7 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.file_io_panel,'Visible','off');
         set(handles.miss_values_panel,'Visible','off');
-        set(handles.resampling_panel,'Visible','off');
+        %set(handles.resampling_panel,'Visible','off');
         set(handles.time_series_info_panel,'Visible','off');
         
         set(handles.outlier_detection_panel,'Visible','on');
@@ -748,7 +768,7 @@ function setVisibility(tab,handles,hObject)
         end
         
     elseif (tab==3)
-        %Clear the Axes2
+        %Clear the axes2
         cla(handles.axes2);    
         legend(handles.axes2,'hide');
         
@@ -759,7 +779,7 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.file_io_panel,'Visible','off');
         set(handles.miss_values_panel,'Visible','off');
-        set(handles.resampling_panel,'Visible','off');
+        %set(handles.resampling_panel,'Visible','off');
         set(handles.time_series_info_panel,'Visible','off');
         
         set(handles.outlier_detection_panel,'Visible','off');
