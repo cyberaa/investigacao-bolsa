@@ -44,13 +44,13 @@ function varargout = Analyser(varargin)
     % End initialization code - DO NOT EDIT
 
 
-    % --- Executes just before Analyser is made visible.
-    function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
-    % This function has no output args, see OutputFcn.
-    % hObject    handle to figure
-    % eventdata  reserved - to be defined in a future version of MATLAB
-    % handles    structure with handles and user data (see GUIDATA)
-    % varargin   command line arguments to Analyser (see VARARGIN)
+% --- Executes just before Analyser is made visible.
+function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to Analyser (see VARARGIN)
 
 
     %%%%
@@ -87,7 +87,9 @@ function varargout = Analyser(varargin)
     handles.mad=0;
     handles.snd=0;
     handles.resampleData = 0;
+    handles.samplingPeriod = 0;
     handles.fillMissing = 0;
+    handles.fillMissingMethod = 'Linear';
     handles.parameters = [];%Stores the parameters selected by the user
     handles.model = [];%Stores the methods chosen by the user
     handles.metrics = [];%Stores the metrics to compare the results, selected by the user
@@ -139,9 +141,21 @@ function inputFile_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    [filename, pathname] = uigetfile({'*'},'File Selector');
+    %%%
+    %%  FIXME FIXME FIXME
+    %%%
+
+    [filename, pathname] = uigetfile({'*.xls;*.xlsx', 'Microsfot Excel File (*.xls,*.xlsx)';'*.csv','Comma Sperated Value (*.csv)' },'Choose a File');
     fullpathname = strcat(pathname,filename); 
-    %[num,txt,raw] = xlsread(fullpathname)
+    
+    [path file ext] = fileparts(filename);
+    
+    if (strcmp(ext,'.csv'))
+        %MAXI LE COM CSV
+        
+    else
+        [num,txt,raw] = xlsread(fullpathname);
+    end
   
     % Update handles structure
     guidata(hObject, handles);
@@ -153,6 +167,10 @@ function outputFile_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+    %%%
+    %%  FIXME FIXME FIXME
+    %%%
+    
     % Update handles structure
     guidata(hObject, handles);
     
@@ -231,6 +249,12 @@ function samplingPeriodText_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of samplingPeriodText as text
 %        str2double(get(hObject,'String')) returns contents of samplingPeriodText as a double
+
+	handles.samplingPeriod = get(hObject,'String');
+    handles.samplingPeriod = str2double(get(hObject,'String'));
+
+    % Update handles structure
+    guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -347,6 +371,13 @@ function linearmenu_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns linearmenu contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from linearmenu
+
+    contents = cellstr(get(hObject,'String'));
+    handles.fillMissingMethod = contents{get(hObject,'Value')};    
+    
+    %%%
+    %%  FIXME FIXME FIXME
+    %%%
 
 
 % --- Executes during object creation, after setting all properties.
