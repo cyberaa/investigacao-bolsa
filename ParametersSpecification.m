@@ -164,7 +164,11 @@ function ok_bt_Callback(hObject, ~, handles)
     if (isempty(windowOverlap))
         windowOverlap = -1;
     else
-        windowOverlap = str2num(windowOverlap);
+        windowOverlap = str2num(windowOverlap);%Fixme maxi verificaçoes
+    end
+    
+    if (windowOverlap < 0)
+        windowOverlap = -1;
     end
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];

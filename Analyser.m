@@ -185,9 +185,9 @@ function iqrButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters = ParametersSpecification();%Open the window
+    handles.parameters(2,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(1));%Close it
+    close(handles.parameters(2,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -198,9 +198,9 @@ function sndButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters = ParametersSpecification();%Open the window
+    handles.parameters(1,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(1));%Close it
+    close(handles.parameters(1,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -211,9 +211,9 @@ function modifiedZScoreButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters = ParametersSpecification();%Open the window
+    handles.parameters(4,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(1));%Close it
+    close(handles.parameters(4,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -225,9 +225,9 @@ function madButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters = ParametersSpecification();%Open the window
+    handles.parameters(5,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(1));%Close it
+    close(handles.parameters(5,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -238,9 +238,9 @@ function grubbsButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters = ParametersSpecification();%Open the window
+    handles.parameters(3,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(1));%Close it
+    close(handles.parameters(3,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -506,7 +506,7 @@ function sndcheckbox_Callback(hObject, ~, handles)
     
     handles.snd = mod((handles.snd + 1),2);
     if (handles.snd == 1)
-        handles.model = [handles.model 0];
+        handles.model = [handles.model 1];
     elseif (ismember(1,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 1);
     end
@@ -588,10 +588,10 @@ function accommodate_bt_Callback(hObject, ~, handles)
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
         else
-            if (handles.parameters(4)==-1)
-                handles.parameters(4) = round(0.01*length(handles.t))-1;
+            if (handles.parameters(i,4)==-1)
+                handles.parameters(i,4) = round(0.01*length(handles.t))-1;
             end
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,handles.parameters(3),handles.parameters(4),handles.parameters(2),handles.model(i));
+            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,handles.parameters(i,3),handles.parameters(i,4),handles.parameters(i,2),handles.model(i));
         end
         
         handles.results(i,1) = sum(outliers(i,:));
@@ -636,7 +636,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     for i=1:length(handles.model)
         if (handles.model(i) == 2)
             handles.methodsName{length(handles.methodsName)+1} = 'IQR Method';
-        elseif (handles.model(i) == 0)
+        elseif (handles.model(i) == 1)
             handles.methodsName{length(handles.methodsName)+1} = 'SND Method';
         elseif (handles.model(i) == 4)
             handles.methodsName{length(handles.methodsName)+1} = 'Modified Z-Score';
