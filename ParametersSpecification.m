@@ -22,7 +22,7 @@ function varargout = ParametersSpecification(varargin)
 
 % Edit the above text to modify the response to help ParametersSpecification
 
-% Last Modified by GUIDE v2.5 18-Jan-2014 14:46:16
+% Last Modified by GUIDE v2.5 18-Jan-2014 16:59:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -45,7 +45,7 @@ end
 
 
 % --- Executes just before ParametersSpecification is made visible.
-function ParametersSpecification_OpeningFcn(hObject, eventdata, handles, varargin)
+function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -55,12 +55,15 @@ function ParametersSpecification_OpeningFcn(hObject, eventdata, handles, varargi
 % Choose default command line output for ParametersSpecification
 %handles.output = hObject;
 
+    handles.slidingWindow = 0;
+    set(handles.windowOverlap,'Visible','off');
+    set(handles.windowOverlapValue,'Visible','off');
 
-% Update handles structure
-guidata(hObject, handles);
+    % Update handles structure
+    guidata(hObject, handles);
 
-% UIWAIT makes ParametersSpecification wait for user response (see UIRESUME)
- uiwait(handles.figure1);
+    % UIWAIT makes ParametersSpecification wait for user response (see UIRESUME)
+    uiwait(handles.figure1);
 
  
 
@@ -147,7 +150,7 @@ end
 
 
 % --- Executes on button press in ok_bt.
-function ok_bt_Callback(hObject, eventdata, handles)
+function ok_bt_Callback(hObject, ~, handles)
 % hObject    handle to ok_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -157,7 +160,12 @@ function ok_bt_Callback(hObject, eventdata, handles)
     windowSize = get(handles.windowSizeValue,'String');
     windowSize = str2num(windowSize);
     windowOverlap = get(handles.windowOverlapValue,'String');
-    windowOverlap = str2num(windowOverlap);
+    
+    if (isempty(windowOverlap))
+        windowOverlap = -1;
+    else
+        windowOverlap = str2num(windowOverlap);
+    end
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];
 
@@ -173,7 +181,7 @@ function cancel_bt_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.output = [];
+    handles.output = [handles.figure1];
     
     % Update handles structure
     guidata(hObject, handles);
@@ -181,4 +189,27 @@ function cancel_bt_Callback(hObject, eventdata, handles)
     uiresume(handles.figure1);
     
     
+    
+
+
+% --- Executes on button press in slidingWindowCheckbox.
+function slidingWindowCheckbox_Callback(hObject, eventdata, handles)
+% hObject    handle to slidingWindowCheckbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of slidingWindowCheckbox
+
+    handles.slidingWindow = mod(handles.slidingWindow+1,2);
+    
+    if (handles.slidingWindow == 1)
+        set(handles.windowOverlap,'Visible','on');
+        set(handles.windowOverlapValue,'Visible','on');
+    else
+        set(handles.windowOverlap,'Visible','off');
+        set(handles.windowOverlapValue,'Visible','off');
+    end
+    
+    % Update handles structure
+    guidata(hObject, handles);
     
