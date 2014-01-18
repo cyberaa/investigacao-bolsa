@@ -144,23 +144,23 @@ function inputFile_bt_Callback(hObject, ~, handles)
 % hObject    handle to inputFile_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+    %%%
+    %%  FIXME FIXME FIXME
+    %%%
+
     [filename, pathname] = uigetfile({'*.xls;*.xlsx', 'Microsfot Excel File (*.xls,*.xlsx)';'*.csv','Comma Sperated Value (*.csv)' },'Choose a File');
-    fullpathname = [pathname filename]; 
+    fullpathname = strcat(pathname,filename); 
     
-    [status,t, data] = get_data_from_file(fullpathname);
-    if status == 0
-        %HOOUVE UM ERRo. JOCA FIXME
+    [path file ext] = fileparts(filename);
+    
+    if (strcmp(ext,'.csv'))
+        %MAXI LE COM CSV
+        
     else
-        handles.t = t;    
-        handles.data_outliers = data;
+        [num,txt,raw] = xlsread(fullpathname);
     end
-    
-    
-    
   
-    %handles.t
-    %handles.data_outliers 
-    % 1 coluna
     % Update handles structure
     guidata(hObject, handles);
 
