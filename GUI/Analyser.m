@@ -682,10 +682,10 @@ function plotData(hObject,handles,axesNumber)
     
     for i=1:length(handles.model)
         %Plot the data
-        size(handles.data_fix_outliers(i,:))
-        size(handles.dL(i,:))
-        size(handles.dH(i,:))
-        size(handles.t)
+        %size(handles.data_fix_outliers(i,:))
+        %size(handles.dL(i,:))
+        %size(handles.dH(i,:))
+        %size(handles.t)
         plot(axesHandler,handles.t,handles.data_fix_outliers(i,:),'g--', handles.t,handles.dL(i,:), 'k',handles.t,handles.dH(i,:), 'k');
         legend(axesHandler,'Original Data','Accommodated Data','Lower Limit','Upper Limit');        
         legend(axesHandler,'show');
