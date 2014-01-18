@@ -103,6 +103,10 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     %Show the main tab
     setVisibility(1,handles,hObject);
     
+    %Hide sampling period boxes
+    set(handles.newSamplingPeriodText,'Visible','off');
+    set(handles.samplingPeriodText,'Visible','off');
+    
     
     % Choose default command line output for Analyser
     handles.output = hObject;
@@ -252,6 +256,8 @@ function samplingPeriodText_Callback(hObject, eventdata, handles)
 
 	handles.samplingPeriod = get(hObject,'String');
     handles.samplingPeriod = str2double(get(hObject,'String'));
+    
+    handles.samplingPeriod
 
     % Update handles structure
     guidata(hObject, handles);
@@ -405,6 +411,14 @@ function resampleDataCheckbox_Callback(hObject, ~, handles)
 % Hint: get(hObject,'Value') returns toggle state of resampleDataCheckbox
     handles.resampleData = handles.resampleData + 1;
     handles.resampleData = mod(handles.resampleData,2);
+    
+    if (handles.resampleData) %Show text box to specify sampling period
+        set(handles.newSamplingPeriodText,'Visible','on');
+        set(handles.samplingPeriodText,'Visible','on');
+    else %Hide the box
+        set(handles.newSamplingPeriodText,'Visible','off');
+        set(handles.samplingPeriodText,'Visible','off');
+    end
     
     % Update handles structure
     guidata(hObject, handles);
@@ -574,6 +588,9 @@ function accommodate_bt_Callback(hObject, ~, handles)
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
         else
+            if (handles.parameters(4)==-1)
+                handles.parameters(4) = round(0.01*length(handles.t))-1;
+            end
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,handles.parameters(3),handles.parameters(4),handles.parameters(2),handles.model(i));
         end
         
