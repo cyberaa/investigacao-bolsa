@@ -7,11 +7,11 @@ function [status,t,data] = get_data_from_file (path)
     
     [numrows, numcols] = size(filedata);            
     
-    if numrows == 2 && numcols == 1
+    if numrows == 2
         t = filedata(1,:)';
         data = filedata(2,:)';
         status = 1;
-    elseif numcols == 2 && numrows==1
+    elseif numcols == 2
         t = filedata(:,1);
         data = filedata(:,2);
         status = 1;
@@ -33,5 +33,5 @@ function [status,filedata] = parse_file(path)
         status = 1;
     else
         status = 0;
-    end
+    end    
 end
