@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 18-Jan-2014 19:40:32
+% Last Modified by GUIDE v2.5 18-Jan-2014 22:21:29
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -74,6 +74,7 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.data_fix_outliers = [];
     handles.dL = [];
     handles.dH = [];
+    handles.t_fix = 0;
 
     handles.plotReferences = [];%Stores the plots computed by the GUI
 
@@ -94,6 +95,7 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.model = [];%Stores the methods chosen by the user
     handles.metrics = [];%Stores the metrics to compare the results, selected by the user
     handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
+    handles.showModel = 0;%If we want to show the plots of the accommodated data
 
     %User selected metrics to compare results
     handles.euclidean=0;
@@ -105,10 +107,10 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     
     %Hide sampling period boxes
     
-        set(handles.missValsCountText,'enable','off');
-        set(handles.methodText,'enable','off');
-        set(handles.resampleDataCheckbox,'enable','off');        
-        set(handles.linearmenu,'enable','off'); 
+    set(handles.missValsCountText,'enable','off');
+    set(handles.methodText,'enable','off');
+    set(handles.resampleDataCheckbox,'enable','off');        
+    set(handles.linearmenu,'enable','off'); 
         
     set(handles.newSamplingPeriodText,'enable','off');
     set(handles.samplingPeriodText,'enable','off');  
@@ -264,9 +266,7 @@ function samplingPeriodText_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of samplingPeriodText as a double
 
 	handles.samplingPeriod = get(hObject,'String');
-    handles.samplingPeriod = str2double(get(hObject,'String'));
-    
-    handles.samplingPeriod
+    handles.samplingPeriod = str2double(get(hObject,'String'));   
 
     % Update handles structure
     guidata(hObject, handles);
@@ -318,6 +318,13 @@ function go_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+    cla(handles.axes1);
+    cla(handles.axes2);
+    cla(handles.axes3);
+    handles.showModel = 0;
+    legend(handles.axes1,'hide');
+    legend(handles.axes2,'hide');
+    legend(handles.axes3,'hide');
 
     %%%
     %%  FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME 
@@ -327,6 +334,12 @@ function go_bt_Callback(hObject, ~, handles)
     maxV = max(handles.data);
     meanV = mean(handles.data); 
     stdV = std(handles.data);
+    
+    %% FIXME: Validação das merdas aqui e erro caso não dê
+    
+    if validate_preprocessing_data() == 0
+        %%FIXME Joca faz alguma merda aqui
+    end
 
     %Start ploting the data
     %Reset the axes
@@ -343,17 +356,24 @@ function go_bt_Callback(hObject, ~, handles)
 
     %Do Prepocessing!
     if (handles.fillMissing == 1)
+        
+               
         %Count the missing values
         set(handles.missValsCountText,'String',['Missing Value Count: ' num2str(sum(isnan(handles.data_miss)))]);
-
-        handles.data_fix = fix_missing(handles.t,handles.data_miss);
-        plot(handles.axes1,handles.t,handles.data_fix,'r--');
+                
+        if handles.resampleData
+            [handles.t_fix,handles.data_fix] = fix_missing(handles.t,handles.data_miss, interp_method(handles.fillMissingMethod), handles.samplingPeriod);                            
+        else
+            [handles.t_fix,handles.data_fix] = fix_missing(handles.t,handles.data_miss, interp_method(handles.fillMissingMethod));                
+        end
+        plot(handles.axes1,handles.t_fix,handles.data_fix,'r--');
         legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected');
         hold(handles.axes1,'on');
     else
         legend(handles.axes1,'Original Series');
     end
     
+    %FIXME: Maxi
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
     set(handles.mean,'String', ['Mean: ' num2str(meanV)]);
     set(handles.std,'String', ['Standard Deviation: ' num2str(stdV)]);
@@ -402,9 +422,8 @@ function linearmenu_Callback(hObject, eventdata, handles)
     contents = cellstr(get(hObject,'String'));
     handles.fillMissingMethod = contents{get(hObject,'Value')};    
     
-    %%%
-    %%  FIXME FIXME FIXME
-    %%%
+    % Update handles structure
+    guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -597,22 +616,27 @@ function accommodate_bt_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
     
     %outlier_locations = handles.outlier_locations';
-    handles.data_fix_outliers = zeros(length(handles.model),length(handles.data_miss));
-    outliers = zeros(length(handles.model),length(handles.data_miss));
-    handles.dL = zeros(length(handles.model),length(handles.data_miss));
-    handles.dH = zeros(length(handles.model),length(handles.data_miss));
+    handles.data_fix_outliers = zeros(length(handles.model),length(handles.data_fix));
+    outliers = zeros(length(handles.model),length(handles.data_fix));
+    handles.dL = zeros(length(handles.model),length(handles.data_fix));
+    handles.dH = zeros(length(handles.model),length(handles.data_fix));
     
     handles.results = [];%%FIXME 
+    handles.showModel = 1;
+    
+    ACCOMODATION_TYPE = 0; %0 = average ; 1 = linear; 2 = median JOCA FIXME
     
     for i=1:length(handles.model)
         
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_miss,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),ACCOMODATION_TYPE,0.85);
         else
-            if (handles.parameters(i,4)==-1)
-                handles.parameters(i,4) = round(0.01*length(handles.t))-1;
+            j = handles.model(i);
+            
+            if (handles.parameters(j,4)==-1)
+                handles.parameters(j,4) = round(0.01*length(handles.t))-1;
             end
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_miss,handles.parameters(i,3),handles.parameters(i,4),handles.parameters(i,2),handles.model(i));
+            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
         end
         
         handles.results(i,1) = sum(outliers(i,:));
@@ -623,7 +647,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
 
-        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_miss',handles.data_fix_outliers(i,:));
+        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_fix',handles.data_fix_outliers(i,:));
         
         %Now we will compute the metric's comparison
         for j=1:length(handles.metrics)
@@ -647,7 +671,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     %fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
 
     %Plot the results of the Outlier accommodation methods used
-    plotData(hObject,handles,2);
+    plotData(hObject,handles,handles.axes2);
     
     %%%
     %% Get methods - For now this will stay here... Maybe we could do this on the callback function where we select each method, however it would be
@@ -676,18 +700,10 @@ function accommodate_bt_Callback(hObject, ~, handles)
     
 
 % --- Plots the results of the Outlier's accommodation methods applied, as selected by the user
-function plotData(hObject,handles,axesNumber)     
-
-    data_outliers = handles.data_miss';
-    t_outlier = handles.t;   
-    
-    handles.plotReferences = [];
-    
-    if (axesNumber == 2)
-        axesHandler = handles.axes2;
-    elseif (axesNumber == 3)
-        axesHandler = handles.axes3;
-    end
+function plotData(hObject,handles,axesHandler)   
+    data_outliers = handles.data_fix';
+    t_outlier = handles.t_fix; 
+    handles.plotReferences = [];    
         
     %Reset the axes
     cla(axesHandler);
@@ -695,22 +711,25 @@ function plotData(hObject,handles,axesNumber)
     % Update handles structure
     guidata(hObject, handles);
 
-    %Plot the data
-    plot(axesHandler,t_outlier,data_outliers,'r');
-    title(axesHandler,'Outlier Detection and Accomodation');
-    hold(axesHandler,'on');
-    
-    for i=1:length(handles.model)
+    if (~isempty(handles.model))
         %Plot the data
-        %size(handles.data_fix_outliers(i,:))
-        %size(handles.dL(i,:))
-        %size(handles.dH(i,:))
-        %size(handles.t)
-        plot(axesHandler,handles.t,handles.data_fix_outliers(i,:),'g--', handles.t,handles.dL(i,:), 'k',handles.t,handles.dH(i,:), 'k');
-        legend(axesHandler,'Original Data','Accommodated Data','Lower Limit','Upper Limit');        
-        legend(axesHandler,'show');
+        plot(axesHandler,t_outlier,data_outliers,'r');
+        title(axesHandler,'Outlier Detection and Accomodation');
         hold(axesHandler,'on');
+
+        for i=1:length(handles.model)
+            %Plot the data
+            %size(handles.data_fix_outliers(i,:))
+            %size(handles.dL(i,:))
+            %size(handles.dH(i,:))
+            %size(handles.t)
+            plot(axesHandler,handles.t_fix,handles.data_fix_outliers(i,:),'g--', handles.t_fix,handles.dL(i,:), 'k',handles.t_fix,handles.dH(i,:), 'k');
+            legend(axesHandler,'Original Data','Accommodated Data','Lower Limit','Upper Limit');        
+            legend(axesHandler,'show');
+            hold(axesHandler,'on');
+        end
     end
+    
 
     % Update handles structure
     guidata(hObject, handles);    
@@ -737,9 +756,9 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.table_panel,'Visible','off'); 
         
-        if ( isempty(handles.model) == 0 )
+        if ( handles.showModel == 1 && isempty(handles.model) == 0 )
             legend(handles.axes2,'show');
-            plotData(hObject,handles,2);
+            plotData(hObject,handles,handles.axes2);
         end
         
     elseif (tab==2)
@@ -762,9 +781,9 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.table_panel,'Visible','off');
         
-        if ( isempty(handles.model) == 0 )
+        if ( handles.showModel == 1 && isempty(handles.model) == 0 )
             legend(handles.axes2,'show');
-            plotData(hObject,handles,2);
+            plotData(hObject,handles,handles.axes2);
         end
         
     elseif (tab==3)
@@ -787,11 +806,23 @@ function setVisibility(tab,handles,hObject)
         
         set(handles.table_panel,'Visible','on');
         
-        if ( isempty(handles.model) == 0 )           
-            plotData(hObject,handles,3);
+        if ( handles.showModel == 1 && isempty(handles.model) == 0 )           
+            plotData(hObject,handles,handles.axes3);
             legend(handles.axes3,'show');
         end
     end
     
     % Update handles structure
     guidata(hObject, handles);
+    
+function m = interp_method(in)
+    if strcmp(in,'Linear')
+        m = 'linear';
+    elseif strcmp(in, 'Zero-Order Hold')
+        m = 'zoh';
+    else
+        disp('error');
+    end
+    
+function valid=validate_preprocessing_data()
+    valid = 1; %FIXME: Implementar

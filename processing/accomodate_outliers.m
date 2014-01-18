@@ -31,7 +31,7 @@
 % robust methods.
 %
 %%%%
-function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overlap,snd, model)
+function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overlap,model,accomodation_type,snd)
     data_fix=zeros(length(data),1);
     dL=zeros(length(data),1);
     dH=zeros(length(data),1);
@@ -64,7 +64,7 @@ function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overla
         dL(n) = dLw;
         dH(n) = dHw;
         
-        if model == 1
+        if accomodation_type == 1
             data_fix(n) = accomodation_linear(wnd_t,w,detectedw);
         else
             data_fix(n) = accomodation_mean(wnd_t,w,detectedw);
