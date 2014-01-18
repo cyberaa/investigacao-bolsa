@@ -151,6 +151,7 @@ function inputFile_bt_Callback(hObject, ~, handles)
     
     if status == 0
         %HOOUVE UM ERRO. JOCA FIXME
+        disp('merda');
     else
         handles.t = t;    
         handles.data_miss = data;
@@ -575,23 +576,23 @@ function accommodate_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     
-    outlier_locations = handles.outlier_locations';
-    handles.data_fix_outliers = zeros(length(handles.model),length(handles.data));
-    outliers = zeros(length(handles.model),length(handles.data));
-    handles.dL = zeros(length(handles.model),length(handles.data));
-    handles.dH = zeros(length(handles.model),length(handles.data));
+    %outlier_locations = handles.outlier_locations';
+    handles.data_fix_outliers = zeros(length(handles.model),length(handles.data_miss));
+    outliers = zeros(length(handles.model),length(handles.data_miss));
+    handles.dL = zeros(length(handles.model),length(handles.data_miss));
+    handles.dH = zeros(length(handles.model),length(handles.data_miss));
     
     handles.results = [];%%FIXME 
     
     for i=1:length(handles.model)
         
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
+            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_miss,round(0.01*length(handles.t)),round(0.01*length(handles.t))-1,0.85,handles.model(i));
         else
             if (handles.parameters(i,4)==-1)
                 handles.parameters(i,4) = round(0.01*length(handles.t))-1;
             end
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_outliers,handles.parameters(i,3),handles.parameters(i,4),handles.parameters(i,2),handles.model(i));
+            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t,handles.data_miss,handles.parameters(i,3),handles.parameters(i,4),handles.parameters(i,2),handles.model(i));
         end
         
         handles.results(i,1) = sum(outliers(i,:));
@@ -602,7 +603,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
 
-        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_outliers',handles.data_fix_outliers(i,:));
+        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_miss',handles.data_fix_outliers(i,:));
         
         %Now we will compute the metric's comparison
         for j=1:length(handles.metrics)
@@ -623,7 +624,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     end
     
     
-    fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
+    %fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
 
     %Plot the results of the Outlier accommodation methods used
     plotData(hObject,handles,2);
@@ -657,7 +658,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
 % --- Plots the results of the Outlier's accommodation methods applied, as selected by the user
 function plotData(hObject,handles,axesNumber)     
 
-    data_outliers = handles.data_outliers';
+    data_outliers = handles.data_miss';
     t_outlier = handles.t;   
     
     handles.plotReferences = [];
@@ -675,14 +676,18 @@ function plotData(hObject,handles,axesNumber)
     guidata(hObject, handles);
 
     %Plot the data
-    plot(axesHandler,t_outlier,data_outliers,'r.',t_outlier,handles.data,'y.');
+    plot(axesHandler,t_outlier,data_outliers,'r');
     title(axesHandler,'Outlier Detection and Accomodation');
     hold(axesHandler,'on');
     
     for i=1:length(handles.model)
         %Plot the data
-        plot(axesHandler,handles.t,handles.data_fix_outliers(i,:),handles.t,handles.dL(i,:),handles.t,handles.dH(i,:));
-        legend(axesHandler,'Outliers','Original','Accommodated','Lower Limit','Upper Limit');        
+        size(handles.data_fix_outliers(i,:))
+        size(handles.dL(i,:))
+        size(handles.dH(i,:))
+        size(handles.t)
+        plot(axesHandler,handles.t,handles.data_fix_outliers(i,:),'g--', handles.t,handles.dL(i,:), 'k',handles.t,handles.dH(i,:), 'k');
+        legend(axesHandler,'Original Data','Accommodated Data','Lower Limit','Upper Limit');        
         legend(axesHandler,'show');
         hold(axesHandler,'on');
     end
