@@ -318,8 +318,8 @@ function go_bt_Callback(hObject, ~, handles)
     meanV = mean(handles.data_miss); 
     stdV = std(handles.data_miss);    
     
-    if validate_preprocessing_data() == 0
-        errorMessage = 'There was an error with the preprocessing data';
+    if validate_preprocessing_data(handles) == 0
+        errorMessage = 'Invalid preprocessing data (maybe invalid resampling value?)';
         errordlg(errorMessage,'Invalid Data');
         return;
     end
@@ -835,5 +835,14 @@ function m = interp_method(in)
         disp('error');
     end
     
-function valid=validate_preprocessing_data()
+function valid=validate_preprocessing_data(handles)
     valid = 1; %FIXME: Implementar
+    
+    if isempty(handles.data_miss) || isempty(handles.t)
+        valid = 0; return;
+    end
+
+    
+    if handles.resampleData && handles.samplingPeriod < handles.t(end)-handles.t(1)
+        valid = 0; return;
+    end
