@@ -81,6 +81,7 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.parameters = [];%Stores values for the parameters as selected by the user
     handles.fileName = '';%Stores the root name of files saved
     handles.directoryName = '';%Stores the direcotry of the saved files
+    handles.data_fix = []; handles.t_fix = [];
     
     %Show the main tab
     setVisibility(1,handles,hObject);
@@ -652,6 +653,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         legend(handles.axes2,'hide');
         errordlg('Invalid parameters selected or data not pre-processed','No Data Processed');
         set(handles.filePathText,'String', '');
+        return;
     end
     
     %Ask user if he/she wants to save the results in a file
@@ -698,7 +700,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
         handles.results(i,3) = min(handles.data_fix_outliers(i,:));
-        handles.resuts(i,4) = mean(handles.data_fix_outliers(i,:));
+        handles.results(i,4) = mean(handles.data_fix_outliers(i,:));
         handles.results(i,5) = std(handles.data_fix_outliers(i,:)); 
         
         handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
@@ -716,7 +718,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
                 handles.cnames{length(handles.cnames)+1} = 'Absolute Difference';
                 handles.results(i,length(handles.cnames)) = absdiff;
             
-            else
+            elseif (handles.metrics(j) == 3)
                 handles.cnames{length(handles.cnames)+1} = 'Comp Time-Invariant';
                 handles.results(i,length(handles.cnames)) = complexdiff;
             end
@@ -737,13 +739,17 @@ function accommodate_bt_Callback(hObject, ~, handles)
     %%               more difficult to implement this. Same goes to the metrics
     %%%
     handles.methodsName = {};
+    
+    % MEU, tanto COPY PASTE dá-me CANCRO! Duas destas linhas podiam estar
+    % fora da cascata de elseifs!!!!!! e a cascata podia ser substituída
+    % por um array lookup! I'm dying!
     for i=1:length(handles.model)
         if (handles.model(i) == 2)
             handles.methodsName{length(handles.methodsName)+1} = 'IQR Method';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.FileName,'IQR Method');
-                fullpath = [handles.directoryName name];
+                name = strcat(handles.fileName,'/IQR Method.csv');
+                fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
             
@@ -751,8 +757,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'SND Method';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'SND Method');
-                fullpath = [handles.directoryName name];
+                name = strcat(handles.fileName,'/SND Method.csv');
+                fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
             
@@ -760,8 +766,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'Modified Z-Score';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'Modified Z-Score');
-                fullpath = [handles.directoryName name];
+                name = strcat(handles.fileName,'/Modified Z-Score.csv');
+                fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
             
@@ -769,8 +775,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'MAD Test';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'MAD Test');
-                fullpath = [handles.directoryName name];
+                name = strcat(handles.fileName,'/MAD Test.csv');
+                fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
             
@@ -778,8 +784,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'Grubbs Test';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.FileName,'Grubbs Test');
-                fullpath = [handles.directoryName name];
+                name = strcat(handles.fileName,'/Grubbs Test.csv');
+                fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
             
@@ -789,7 +795,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     %Update Table with metrics
     set(handles.table,'data',handles.results,'ColumnName',handles.cnames,'RowName',handles.methodsName);
     
-    handles.parameters = default_parameters();%Restore default parameters
+   % handles.parameters = default_parameters();%Restore default parameters
     
     % Update handles structure
     guidata(hObject, handles);
@@ -1006,5 +1012,7 @@ function plotDifferenceSeries(hObject, handles)
     
     
 function save_file(fullpath,time,data)
+    fullpath = char(fullpath)
+    csvwrite(fullpath,  [ time data' ])
 
 
