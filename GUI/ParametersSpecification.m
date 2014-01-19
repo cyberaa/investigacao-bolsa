@@ -176,7 +176,7 @@ function ok_bt_Callback(hObject, ~, handles)
     end
     
     if (windowOverlap < 0)
-        windowOverlap = -1;
+        windowOverlap = windowSize-1;
     end
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];
@@ -246,6 +246,9 @@ function accommodationTypeList_Callback(hObject, eventdata, handles)
 
     contents = cellstr(get(hObject,'String'));
     handles.accommodationType = contents{get(hObject,'Value')};
+    
+    % Update handles structure
+    guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function accommodationTypeList_CreateFcn(hObject, eventdata, handles)
