@@ -199,8 +199,6 @@ function ok_bt_Callback(hObject, ~, handles)
     
     if (strcmp(handles.accommodationType,'Average'))
         handles.output(5) = 0;
-    elseif(strcmp(handles.accommodationType,'Median'))
-        handles.output(5) = 2;
     else
         handles.output(5) = 1;
     end
