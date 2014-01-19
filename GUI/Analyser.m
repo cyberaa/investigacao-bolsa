@@ -658,11 +658,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     close(resultFile{1});%Close it
      
     handles.fileName = resultFile(2);
-    handles.directoryName = resultFile(3);
-    
-    handles.fileName
-    handles.directoryName
-    
+    handles.directoryName = resultFile(3);   
 
     %outlier_locations = handles.outlier_locations';
     handles.data_fix_outliers = zeros(length(handles.model),length(handles.data_fix));
@@ -725,7 +721,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     %%               more difficult to implement this. Same goes to the metrics
     %%%
     handles.methodsName = {};
-    
+    handles.directoryName = strcat(handles.directoryName, '/');
     % MEU, tanto COPY PASTE d�me CANCRO! Duas destas linhas podiam estar
     % fora da cascata de elseifs!!!!!! e a cascata podia ser substitu�a
     % por um array lookup! I'm dying!
@@ -734,7 +730,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'IQR Method';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'/IQR Method.csv');
+                name = strcat(handles.fileName,'IQR Method.csv');
                 fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
@@ -743,7 +739,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'SND Method';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'/SND Method.csv');
+                name = strcat(handles.fileName,'SND Method.csv');
                 fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
@@ -752,7 +748,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'Modified Z-Score';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'/Modified Z-Score.csv');
+                name = strcat(handles.fileName,'Modified Z-Score.csv');
                 fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
@@ -761,7 +757,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'MAD Test';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'/MAD Test.csv');
+                name = strcat(handles.fileName,'MAD Test.csv');
                 fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
@@ -770,7 +766,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
             handles.methodsName{length(handles.methodsName)+1} = 'Grubbs Test';
             
             if (strcmp('',handles.fileName) == 0)%Save File to Disk
-                name = strcat(handles.fileName,'/Grubbs Test.csv');
+                name = strcat(handles.fileName,'Grubbs Test.csv');
                 fullpath = strcat(char(handles.directoryName), name);
                 save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
             end
