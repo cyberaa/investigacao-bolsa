@@ -635,7 +635,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     handles.results = [];%%FIXME 
     handles.showModel = 1;
     
-    ACCOMODATION_TYPE = 0; %0 = average ; 1 = linear; 2 = median JOCA FIXME
+    ACCOMODATION_TYPE = 1; %0 = average ; 1 = linear; 2 = median JOCA FIXME
     
     for i=1:length(handles.model)
         
