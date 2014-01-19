@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 19-Jan-2014 14:02:16
+% Last Modified by GUIDE v2.5 19-Jan-2014 15:30:07
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -515,6 +515,23 @@ function complextimecheckbox_Callback(hObject, ~, handles)
     
     % Update handles structure
     guidata(hObject, handles);
+    
+% --- Executes on button press in absoluteDifferenceCheckbox.
+function absoluteDifferenceCheckbox_Callback(hObject, eventdata, handles)
+% hObject    handle to absoluteDifferenceCheckbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of absoluteDifferenceCheckbox
+
+    if (get(handles.complextimecheckbox,'Value'))
+        handles.metrics = [handles.metrics 4];
+    elseif (ismember(4,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.metrics = handles.metrics(handles.metrics ~= 4);
+    end
+    
+    % Update handles structure
+    guidata(hObject, handles);
 
 
 % --- Executes on button press in iqrcheckbox.
@@ -548,7 +565,7 @@ function sndcheckbox_Callback(hObject, ~, handles)
     if (get(handles.sndcheckbox,'Value'))
         handles.model = [handles.model 0];
     elseif (ismember(0,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
-        handles.model = handles.model(handles.model ~= 1);
+        handles.model = handles.model(handles.model ~= 0);
     end
     
     % Update handles structure
@@ -616,7 +633,7 @@ function linearMethodCheckbox_Callback(hObject, eventdata, handles)
     if (get(handles.linearMethodCheckbox,'Value'))
         handles.model = [handles.model 1];
     elseif (ismember(1,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
-        handles.model = handles.model(handles.model ~= 4);
+        handles.model = handles.model(handles.model ~= 1);
     end
     
     % Update handles structure
@@ -630,6 +647,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
     
     if validate_accomodation_data(handles) == 0
+        legend(handles.axes2,'hide');
         errordlg('Invalid parameters selected or data not pre-processed','No Data Processed');
         set(handles.filePathText,'String', '');
     end
@@ -669,7 +687,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         handles.cnames = {'Number of Outliers Detected','Max Value', 'Min Value', 'Mean', 'STD'};  
 
-        [~, quaddiff, complexdiff, absdiff] = compare_series(handles.data_fix',handles.data_fix_outliers(i,:));
+        [handles.diffseries, quaddiff, complexdiff, absdiff] = compare_series(handles.data_fix',handles.data_fix_outliers(i,:));
         
         %Now we will compute the metric's comparison
         for j=1:length(handles.metrics)
@@ -678,8 +696,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
                 handles.cnames{length(handles.cnames)+1} = 'Euclidean';
                 handles.results(i,length(handles.cnames)) = quaddiff; 
             
-            elseif (handles.metrics(j) == 2)
-                handles.cnames{length(handles.cnames)+1} = 'Difference';
+            elseif (handles.metrics(j) == 4)
+                handles.cnames{length(handles.cnames)+1} = 'Absolute Difference';
                 handles.results(i,length(handles.cnames)) = absdiff;
             
             else
@@ -693,6 +711,12 @@ function accommodate_bt_Callback(hObject, ~, handles)
 
     %Plot the results of the Outlier accommodation methods used
     plotData(hObject,handles,handles.axes2);
+    
+    if (~isempty(find(handles.metrics == 2, 1)))%Difference metric selected
+        plotDifferenceSeries(hObject, handles);
+    end
+    
+    
     
     %%%
     %% Get methods - For now this will stay here... Maybe we could do this on the callback function where we select each method, however it would be
@@ -762,16 +786,18 @@ function setVisibility(tab,handles,hObject)
     if (tab==1)
         %Clear Axes3
         cla(handles.axes3);
+        cla(handles.axes4);
         legend(handles.axes3,'hide');
+        legend(handles.axes4,'hide');
         
         set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','on');
         set(handles.axes3,'Visible','off');
+        set(handles.axes4,'Visible','off');
         set(handles.go_bt,'Visible','on');
         
         set(handles.file_io_panel,'Visible','on');
         set(handles.miss_values_panel,'Visible','on');
-        %set(handles.resampling_panel,'Visible','on');
         set(handles.time_series_info_panel,'Visible','on');
         
         set(handles.outlier_detection_panel,'Visible','off');
@@ -792,11 +818,11 @@ function setVisibility(tab,handles,hObject)
         set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','on');
         set(handles.axes3,'Visible','off');
+        set(handles.axes4,'Visible','on');
         set(handles.go_bt,'Visible','off');
         
         set(handles.file_io_panel,'Visible','off');
         set(handles.miss_values_panel,'Visible','off');
-        %set(handles.resampling_panel,'Visible','off');
         set(handles.time_series_info_panel,'Visible','off');
         
         set(handles.outlier_detection_panel,'Visible','on');
@@ -808,20 +834,25 @@ function setVisibility(tab,handles,hObject)
             legend(handles.axes2,'show');
             plotData(hObject,handles,handles.axes2);
         end
+        if (~isempty(find(handles.metrics == 2, 1)))%Difference metric selected
+            plotDifferenceSeries(hObject, handles);
+        end
         
     elseif (tab==3)
         %Clear the axes2
-        cla(handles.axes2);    
+        cla(handles.axes2);  
+        cla(handles.axes4);
         legend(handles.axes2,'hide');
+        legend(handles.axes4,'hide');
         
         set(handles.axes1,'Visible','on');
         set(handles.axes2,'Visible','off');
         set(handles.axes3,'Visible','on');
+        set(handles.axes4,'Visible','off');
         set(handles.go_bt,'Visible','off');
         
         set(handles.file_io_panel,'Visible','off');
         set(handles.miss_values_panel,'Visible','off');
-        %set(handles.resampling_panel,'Visible','off');
         set(handles.time_series_info_panel,'Visible','off');
         
         set(handles.outlier_detection_panel,'Visible','off');
@@ -907,3 +938,18 @@ function z = default_parameters()
     z(4,2:5) = [0.05 20 2 1];
     z(5,2:5) = [3.5 20 2 1];
     z(6,2:5) = [3 20 2 1];
+    
+%%%
+%%  This function plots the difference to original data
+%%%
+function plotDifferenceSeries(hObject, handles) 
+
+    %Plot difference between the series
+    plot(handles.axes4,handles.t_fix,handles.diffseries,'--');
+    legend(handles.axes4,'Difference Between the Two Series');
+    title('Difference to Original Data');
+    legend(handles.axes4,'show');
+    hold(handles.axes4,'on');
+    
+    % Update handles structure
+    guidata(hObject, handles);
