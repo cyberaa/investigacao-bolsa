@@ -139,7 +139,7 @@ function inputFile_bt_Callback(hObject, ~, handles)
 % hObject    handle to inputFile_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    [filename, pathname] = uigetfile({'*.xls;*.xlsx', 'Microsfot Excel File (*.xls,*.xlsx)';'*.csv','Comma Sperated Value (*.csv)' },'Choose a File');
+    [filename, pathname] = uigetfile({'*.csv','Comma Sperated Value (*.csv)'; '*.xls;*.xlsx', 'Microsoft Excel File (*.xls,*.xlsx)'},'Choose a File');
     fullpathname = [pathname filename];
     
     [status,t, data] = get_data_from_file(fullpathname);
