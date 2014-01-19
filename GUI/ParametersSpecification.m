@@ -22,7 +22,7 @@ function varargout = ParametersSpecification(varargin)
 
 % Edit the above text to modify the response to help ParametersSpecification
 
-% Last Modified by GUIDE v2.5 18-Jan-2014 16:59:06
+% Last Modified by GUIDE v2.5 19-Jan-2014 02:54:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,8 +56,14 @@ function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
 %handles.output = hObject;
 
     handles.slidingWindow = 0;
-    set(handles.windowOverlap,'Visible','off');
-    set(handles.windowOverlapValue,'Visible','off');
+    
+    temp = varargin(2);
+    
+    set(handles.sndText,'String',varargin(1));
+    set(handles.sndValue,'String',temp(1));
+    set(handles.sndHelpText,'String',varargin(3));
+    
+    handles.accommodationType = 'Linear';
 
     % Update handles structure
     guidata(hObject, handles);
@@ -172,6 +178,14 @@ function ok_bt_Callback(hObject, ~, handles)
     end
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];
+    
+    if (strcmp(content,'Average'))
+        handles.output(5) = 0;
+    elseif(strcmp(content,'Median'))
+        handles.output(5) = 2;
+    else
+        handles.output(5) = 1;
+    end
 
     % Update handles structure
     guidata(hObject, handles);
@@ -206,14 +220,39 @@ function slidingWindowCheckbox_Callback(hObject, eventdata, handles)
 
     handles.slidingWindow = mod(handles.slidingWindow+1,2);
     
-    if (handles.slidingWindow == 1)
-        set(handles.windowOverlap,'Visible','on');
-        set(handles.windowOverlapValue,'Visible','on');
-    else
+    if (get(handles.slidingWindowCheckbox,'Value'))
         set(handles.windowOverlap,'Visible','off');
         set(handles.windowOverlapValue,'Visible','off');
+    else
+        set(handles.windowOverlap,'Visible','on');
+        set(handles.windowOverlapValue,'Visible','on');
     end
     
     % Update handles structure
     guidata(hObject, handles);
-    
+ 
+
+
+% --- Executes on selection change in accommodationTypeList.
+function accommodationTypeList_Callback(hObject, eventdata, handles)
+% hObject    handle to accommodationTypeList (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns accommodationTypeList contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from accommodationTypeList
+
+    contents = cellstr(get(hObject,'String'));
+    handles.accommodationType = contents{get(hObject,'Value')};
+
+% --- Executes during object creation, after setting all properties.
+function accommodationTypeList_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to accommodationTypeList (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

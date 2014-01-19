@@ -165,7 +165,7 @@ function iqrButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(3,:) = ParametersSpecification();%Open the window
+    handles.parameters(3,:) = ParametersSpecification('IQRM - Interquartile Range Multiplier',2.31,'Texto de apoio');%Open the window
     
     close(handles.parameters(3,1));%Close it
     
@@ -178,7 +178,7 @@ function sndButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(1,:) = ParametersSpecification();%Open the window
+    handles.parameters(1,:) = ParametersSpecification('SND - Standard Normal Deviation',2,'Texto de apoio');%Open the window
     
     close(handles.parameters(1,1));%Close it
     
@@ -191,7 +191,7 @@ function modifiedZScoreButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(5,:) = ParametersSpecification();%Open the window
+    handles.parameters(5,:) = ParametersSpecification('Z-score Threshold',3.5,'Texto de apoio');%Open the window
     
     close(handles.parameters(5,1));%Close it
     
@@ -205,7 +205,7 @@ function madButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(6,:) = ParametersSpecification();%Open the window
+    handles.parameters(6,:) = ParametersSpecification('MADe Coefficient',3,'Texto de apoio');%Open the window
     
     close(handles.parameters(6,1));%Close it
     
@@ -218,7 +218,7 @@ function grubbsButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(4,:) = ParametersSpecification();%Open the window
+    handles.parameters(4,:) = ParametersSpecification('Confidence',0.05,'Texto de apoio');%Open the window
     
     close(handles.parameters(4,1));%Close it
     
@@ -232,7 +232,7 @@ function linearButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(2,:) = ParametersSpecification();%Open the window
+    handles.parameters(2,:) = ParametersSpecification('SND - Standard Normal Deviation',3,'Texto de apoio');%Open the window
     
     close(handles.parameters(2,1));%Close it
     
@@ -624,20 +624,19 @@ function accommodate_bt_Callback(hObject, ~, handles)
     handles.results = [];%%FIXME 
     handles.showModel = 1;
     
-    ACCOMODATION_TYPE = 0; %0 = average ; 1 = linear; 2 = median JOCA FIXME
-    
     for i=1:length(handles.model)
         
-        if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),ACCOMODATION_TYPE,0.85);
-        else
+        %if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
+            %[handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),ACCOMODATION_TYPE,0.85);
+        %else
             j = handles.model(i) + 1;
+            ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
             
             if (handles.parameters(j,4)==-1)
                 handles.parameters(j,4) = round(0.01*length(handles.t))-1;
             end
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
-        end
+        %end
         
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
