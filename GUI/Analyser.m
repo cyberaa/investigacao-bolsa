@@ -353,6 +353,8 @@ function go_bt_Callback(hObject, ~, handles)
         legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected');
         hold(handles.axes1,'on');
     else
+        handles.t_fix = handles.t;
+        handles.data_fix = handles.data_miss;
         legend(handles.axes1,'Original Series');
     end
     
