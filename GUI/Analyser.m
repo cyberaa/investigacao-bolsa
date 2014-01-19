@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 19-Jan-2014 01:26:22
+% Last Modified by GUIDE v2.5 19-Jan-2014 14:02:16
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -907,4 +907,3 @@ function z = default_parameters()
     z(4,2:5) = [0.05 20 2 1];
     z(5,2:5) = [3.5 20 2 1];
     z(6,2:5) = [3 20 2 1];
-
