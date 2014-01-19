@@ -178,7 +178,7 @@ function sndButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(1,:) = ParametersSpecification('SND - Standard Normal Deviation',2,'Standard Deviation multiplier. Recommended: 2, 2.5, 3');%Open the window
+    handles.parameters(1,:) = ParametersSpecification({'SND - Standard Normal Deviation',2,'Standard Deviation multiplier. Recommended: 2, 2.5, 3'});%Open the window
     
     close(handles.parameters(1,1));%Close it
     
@@ -191,7 +191,7 @@ function modifiedZScoreButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(5,:) = ParametersSpecification('Z-score Threshold',3.5,'Threshold with which each point os compared. Recommended: 3.5');%Open the window
+    handles.parameters(5,:) = ParametersSpecification({'Z-score Threshold',3.5,'Threshold with which each point os compared. Recommended: 3.5'});%Open the window
     
     close(handles.parameters(5,1));%Close it
     
@@ -205,7 +205,7 @@ function madButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(6,:) = ParametersSpecification('MADe Coefficient',3,'Multiplier for MAD values. Recommended: 2,3, 1.483');%Open the window
+    handles.parameters(6,:) = ParametersSpecification({'MADe Coefficient',3,'Multiplier for MAD values. Recommended: 2,3, 1.483'});%Open the window
     
     close(handles.parameters(6,1));%Close it
     
@@ -218,7 +218,7 @@ function grubbsButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(4,:) = ParametersSpecification('Confidence',0.05,'Confidence to predict outlier. Recommended: 0.05, 0.25');%Open the window
+    handles.parameters(4,:) = ParametersSpecification({'Confidence',0.05,'Confidence to predict outlier. Recommended: 0.05, 0.25'});%Open the window
     
     close(handles.parameters(4,1));%Close it
     
@@ -232,7 +232,7 @@ function linearButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(2,:) = ParametersSpecification('SND - Standard Normal Deviation',3,'Standard Deviation multiplier. Recommended: 2, 2.5, 3');%Open the window
+    handles.parameters(2,:) = ParametersSpecification({'SND - Standard Normal Deviation',3,'Standard Deviation multiplier. Recommended: 2, 2.5, 3'});%Open the window
     
     close(handles.parameters(2,1));%Close it
     
