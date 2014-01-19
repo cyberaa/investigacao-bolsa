@@ -75,7 +75,7 @@ function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
     snd = get(handles.sndValue,'String');    
     snd = str2double(snd);
     
-    handles.output = [handles.figure1 snd 20 2 1];
+    handles.output = [handles.figure1 snd 20 19 1];
 
     % Update handles structure
     guidata(hObject, handles);
@@ -220,7 +220,9 @@ function cancel_bt_Callback(hObject, eventdata, handles)
     snd = get(handles.sndValue,'String');    
     snd = str2double(snd);
     
-    handles.output = [handles.figure1 snd 20 2 1];
+    handles.output = [handles.figure1 snd 20 19 1];
+    
+    handles.output
     
     % Update handles structure
     guidata(hObject, handles);
