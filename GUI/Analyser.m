@@ -315,9 +315,6 @@ function go_bt_Callback(hObject, ~, handles)
     legend(handles.axes2,'hide');
     legend(handles.axes3,'hide');
 
-    %%%
-    %%  FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME 
-    %%%
     minV = min(handles.data_miss);
     maxV = max(handles.data_miss);
     meanV = mean(handles.data_miss); 
@@ -337,11 +334,6 @@ function go_bt_Callback(hObject, ~, handles)
     title(handles.axes1,'Collected Data'); 
     hold(handles.axes1,'on');
     
-    %%%
-    %%  FIXME FIXME ISTO NAO ESTA BEM A FAZER A CENA DOS MISSING VALUES, EU E QUE DEVO SER NABO E NAO ESTOU A REPRESENTAR ISTO LA MUITO BEM
-    %%  COME AGAIN FOR BIG FUDGE???!!!!
-    %%%
-
     %Do Prepocessing!
     if (handles.fillMissing == 1)
         
@@ -674,28 +666,18 @@ function accommodate_bt_Callback(hObject, ~, handles)
     handles.dL = zeros(length(handles.model),length(handles.data_fix));
     handles.dH = zeros(length(handles.model),length(handles.data_fix));
     
-    handles.results = [];%%FIXME 
+    handles.results = [];
     handles.showModel = 1;
     
     for i=1:length(handles.model)
         
-        %SUPERFIXME: Joca, tinhas comentado estas merdas, o que fazia com
-        %que nada desse, porque efectivamente faltam os valores por
-        %defeito. Para ja mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
-        %if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-        %    [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
-        %else
-        
         j = handles.model(i) + 1;            
-        ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
+        ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median
 
         if (handles.parameters(j,4)==-1)
             handles.parameters(j,4) = round(0.01*length(handles.t))-1;
         end
         [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
-        %end
-        
-        
         
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
@@ -961,8 +943,7 @@ function valid = validate_accomodation_data(handles)
     
     for i=1:length(handles.model)
         
-            % If the user hasn't set any parameters, it's okay, just move
-            % on (FIXME: Later on we can remove this if)
+            %% If the user hasn't set any parameters, it's okay, just move on
             if (length(handles.parameters)<2)
                 continue;
             end

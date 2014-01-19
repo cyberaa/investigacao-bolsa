@@ -183,7 +183,7 @@ function ok_bt_Callback(hObject, ~, handles)
     if (isempty(windowOverlap))
         windowOverlap = -1;
     else
-        windowOverlap = str2double(windowOverlap);%Fixme maxi verificaçoes. N�o � aqui, cabr�n!
+        windowOverlap = str2double(windowOverlap);
     end
     
     if (get(handles.slidingWindowCheckbox,'Value'))
