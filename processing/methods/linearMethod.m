@@ -4,9 +4,12 @@ function [detected, dL, dH]=linearMethod(t, w, snd)
     detected = zeros(length(w),1);
     
     s = std(w);
-    Y = DataFitting(w,t);
-    a = Y(1);
-    b = Y(2);      
+    %Y = DataFitting(w,t);
+    %a = Y(1);
+    %b = Y(2);      
+    p = polyfit(t,w,1);
+    a = p(2);
+    b = -p(1);
     
     for i=1:length(w)
         predicted = a-b* (t(i));

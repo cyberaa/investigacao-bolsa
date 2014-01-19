@@ -31,7 +31,7 @@
 % robust methods.
 %
 %%%%
-function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overlap,model,accomodation_type,snd)
+function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overlap,model,accomodation_type,param1)
     data_fix=zeros(length(data),1);
     dL=zeros(length(data),1);
     dH=zeros(length(data),1);
@@ -47,17 +47,17 @@ function [data_fix, detected, dL, dH]=accomodate_outliers(t,data,w_size,w_overla
         wnd_t = t(n);
         
         if model == 0
-            [detectedw, dLw, dHw] = stdMethod(wnd_t,w,snd);
+            [detectedw, dLw, dHw] = stdMethod(wnd_t,w,param1);
         elseif model == 1
-            [detectedw, dLw, dHw] = linearMethod(wnd_t,w,snd);            
+            [detectedw, dLw, dHw] = linearMethod(wnd_t,w,param1);            
         elseif model == 2
-            [detectedw, dLw, dHw] = iqrMethod(wnd_t,w,snd);            
+            [detectedw, dLw, dHw] = iqrMethod(wnd_t,w,param1);            
         elseif model == 3
-            [detectedw, dLw, dHw] = grubbsMethod(wnd_t,w,0.25);
+            [detectedw, dLw, dHw] = grubbsMethod(wnd_t,w,param1);
         elseif model == 4
-            [detectedw, dLw, dHw] = modZScore(wnd_t,w,snd);
+            [detectedw, dLw, dHw] = modZScore(wnd_t,w,param1);
         elseif model == 5
-            [detectedw, dLw, dHw] = MADMethod(wnd_t,w,snd);
+            [detectedw, dLw, dHw] = MADMethod(wnd_t,w,param1);
         end
         
         detected(n)=detectedw;
