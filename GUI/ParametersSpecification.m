@@ -55,13 +55,15 @@ function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
 % Choose default command line output for ParametersSpecification
 %handles.output = hObject;
 
-    handles.slidingWindow = 0;
+    handles.slidingWindow = 0;    
     
-    temp = varargin(2);
+    temp = varargin(1);
     
-    set(handles.sndText,'String',varargin(1));
-    set(handles.sndValue,'String',temp(1));
-    set(handles.sndHelpText,'String',varargin(3));
+    temp_2 = temp{1};
+    
+    set(handles.sndText,'String',temp_2(1));
+    set(handles.sndValue,'String',temp_2(2));
+    set(handles.sndHelpText,'String',temp_2(3));
     
     handles.accommodationType = 'Linear';
 
@@ -161,16 +163,16 @@ function ok_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    snd = get(handles.sndValue,'String');
-    snd = str2num(snd);
+    snd = get(handles.sndValue,'String');    
+    snd = str2double(snd);
     windowSize = get(handles.windowSizeValue,'String');
-    windowSize = str2num(windowSize);
+    windowSize = str2double(windowSize);
     windowOverlap = get(handles.windowOverlapValue,'String');
     
-    if (isempty(windowOverlap))
+    if (isempty(windowOverlap) || get(handles.slidingWindowCheckbox,'Value'))
         windowOverlap = -1;
     else
-        windowOverlap = str2num(windowOverlap);%Fixme maxi verificaÃ§oes. Não é aqui, cabrón!
+        windowOverlap = str2double(windowOverlap);%Fixme maxi verificaÃ§oes. Nï¿½o ï¿½ aqui, cabrï¿½n!
     end
     
     if (windowOverlap < 0)
@@ -179,9 +181,9 @@ function ok_bt_Callback(hObject, ~, handles)
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];
     
-    if (strcmp(content,'Average'))
+    if (strcmp(handles.accommodationType,'Average'))
         handles.output(5) = 0;
-    elseif(strcmp(content,'Median'))
+    elseif(strcmp(handles.accommodationType,'Median'))
         handles.output(5) = 2;
     else
         handles.output(5) = 1;

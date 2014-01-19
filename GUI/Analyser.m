@@ -165,7 +165,7 @@ function iqrButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(3,:) = ParametersSpecification('IQRM - Interquartile Range Multiplier',2.31,'Interquartile range multiplier. Recommended: 2.31');%Open the window
+    handles.parameters(3,:) = ParametersSpecification({'IQRM - Interquartile Range Multiplier',2.31,'Interquartile range multiplier. Recommended: 2.31'});%Open the window
     
     close(handles.parameters(3,1));%Close it
     
@@ -645,7 +645,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         %SUPERFIXME: Joca, tinhas comentado estas merdas, o que fazia com
         %que nada desse, porque efectivamente faltam os valores por
-        %defeito. Para já mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
+        %defeito. Para jï¿½ mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
         else
@@ -878,7 +878,7 @@ function valid = validate_accomodation_data(handles)
             end
             j = handles.model(i) + 1;        
             
-            % Check that the window is in the range ]0,N] : N is length of
+            % Check that the window is in the range ]0,N]ï¿½: N is length of
             % data
             if handles.parameters(j,3) <= 0 || handles.parameters(j,3) > length(handles.data_fix)
                 valid = 0; return;
