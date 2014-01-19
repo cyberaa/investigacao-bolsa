@@ -169,13 +169,13 @@ function ok_bt_Callback(hObject, ~, handles)
     windowSize = str2double(windowSize);
     windowOverlap = get(handles.windowOverlapValue,'String');
     
-    if (isempty(windowOverlap) || get(handles.slidingWindowCheckbox,'Value'))
+    if (isempty(windowOverlap))
         windowOverlap = -1;
     else
         windowOverlap = str2double(windowOverlap);%Fixme maxi verificaçoes. N�o � aqui, cabr�n!
     end
     
-    if (windowOverlap < 0)
+    if (get(handles.slidingWindowCheckbox,'Value'))
         windowOverlap = windowSize-1;
     end
         

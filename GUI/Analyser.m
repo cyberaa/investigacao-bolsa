@@ -74,11 +74,11 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.fillMissing = 1;
     set(handles.fillmissingcheckbox,'Value',handles.fillMissing);%Check the fill missing checkbox
     handles.fillMissingMethod = 'Linear';
-    handles.parameters = [];%Stores the parameters selected by the user
     handles.model = [];%Stores the methods chosen by the user
     handles.metrics = [];%Stores the metrics to compare the results, selected by the user
     handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
     handles.showModel = 0;%If we want to show the plots of the accommodated data
+    handles.parameters = [];%Stores values for the parameters as selected by the user
     
     %Show the main tab
     setVisibility(1,handles,hObject);
@@ -99,6 +99,9 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.output = hObject;
     
     handles.data_miss = handles.data_outliers;
+    
+    %Stores the parameters selected by the user
+    handles.parameters = default_parameters();
 
     % Update handles structure
     guidata(hObject, handles);
@@ -339,7 +342,6 @@ function go_bt_Callback(hObject, ~, handles)
     %Do Prepocessing!
     if (handles.fillMissing == 1)
         
-               
         %Count the missing values
         set(handles.missValsCountText,'String',['Missing Value Count: ' num2str(sum(isnan(handles.data_miss)))]);
                 
@@ -363,9 +365,9 @@ function go_bt_Callback(hObject, ~, handles)
     else
         [t_temp, data_temp] = fix_missing(handles.t,handles.data_miss,'linear');
     end
-        length(data_temp)
-        length(t_temp)
-        round(0.10*length(data_temp))
+        %length(data_temp)
+        %length(t_temp)
+        %round(0.10*length(data_temp))
     [~,outliers_detect,~,~] = accomodate_outliers(t_temp, data_temp, round(0.10*length(data_temp)), round(0.10*length(data_temp))-1,0,1,2.5);
     
     numberOutliers = sum(outliers_detect);
@@ -645,18 +647,19 @@ function accommodate_bt_Callback(hObject, ~, handles)
         
         %SUPERFIXME: Joca, tinhas comentado estas merdas, o que fazia com
         %que nada desse, porque efectivamente faltam os valores por
-        %defeito. Para j� mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
-        if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
-        else
-            j = handles.model(i) + 1;
+        %defeito. Para ja mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
+        %if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
+        %    [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
+        %else
+        
+            j = handles.model(i) + 1;            
             ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
             
             if (handles.parameters(j,4)==-1)
                 handles.parameters(j,4) = round(0.01*length(handles.t))-1;
             end
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
-        end
+        %end
         
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
@@ -686,8 +689,6 @@ function accommodate_bt_Callback(hObject, ~, handles)
         end
     end
     
-
-    
     %fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
 
     %Plot the results of the Outlier accommodation methods used
@@ -714,6 +715,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
     
     %Update Table with metrics
     set(handles.table,'data',handles.results,'ColumnName',handles.cnames,'RowName',handles.methodsName);
+    
+    handles.parameters = default_parameters();%Restore default parameters
     
     % Update handles structure
     guidata(hObject, handles);
@@ -890,3 +893,18 @@ function valid = validate_accomodation_data(handles)
             end
     end
 valid = 1;
+
+%%%
+%%  This next function will store the default values of the parameters
+%%%
+function z = default_parameters()
+    
+    z = zeros(6,5);%To store all the parameters
+    
+    z(1,2:5) = [2 20 2 1];
+    z(2,2:5) = [3 20 2 1];
+    z(3,2:5) = [2.31 20 2 1];
+    z(4,2:5) = [0.05 20 2 1];
+    z(5,2:5) = [3.5 20 2 1];
+    z(6,2:5) = [3 20 2 1];
+
