@@ -147,10 +147,11 @@ function inputFile_bt_Callback(hObject, ~, handles)
     fullpathname = [pathname filename];
     
     [status,t, data] = get_data_from_file(fullpathname);
+        
+    errorMessage = 'File corrupted or with unexpected content\nValid files must consist of two rows or two columns, representing the time (first) and the data/samples (second). Use NaN to represent missing values';
     
-    if status == 0
-        %HOOUVE UM ERRO. JOCA FIXME
-        disp('merda');
+    if status == 0        
+        errordlg(errorMessage,'Invalid File Content');
     else
         handles.t = t;    
         handles.data_miss = data;
@@ -319,15 +320,15 @@ function go_bt_Callback(hObject, ~, handles)
     %%  FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME 
     %%%
     numberOutliers = 35;%FIXME HERE
-    minV = min(handles.data);
-    maxV = max(handles.data);
-    meanV = mean(handles.data); 
-    stdV = std(handles.data);
-    
-    %% FIXME: Valida��o das merdas aqui e erro caso n�o d�
+    minV = min(handles.data_miss);
+    maxV = max(handles.data_miss);
+    meanV = mean(handles.data_miss); 
+    stdV = std(handles.data_miss);    
     
     if validate_preprocessing_data() == 0
-        %%FIXME Joca faz alguma merda aqui
+        errorMessage = 'There was an error with the preprocessing data';
+        errordlg(errorMessage,'Invalid Data');
+        return;
     end
 
     %Start ploting the data
