@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 18-Jan-2014 22:21:29
+% Last Modified by GUIDE v2.5 19-Jan-2014 01:26:22
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -69,11 +69,6 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.plotReferences = [];%Stores the plots computed by the GUI
 
     %User decision in terms of algorithms and data resampling and filling missing values
-    handles.iqr=0;
-    handles.modifiedzscore=0;
-    handles.grubbs=0;
-    handles.mad=0;
-    handles.snd=0;
     handles.resampleData = 0;
     handles.samplingPeriod = 0;
     handles.fillMissing = 1;
@@ -84,11 +79,6 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.metrics = [];%Stores the metrics to compare the results, selected by the user
     handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
     handles.showModel = 0;%If we want to show the plots of the accommodated data
-
-    %User selected metrics to compare results
-    handles.euclidean=0;
-    handles.differenceToOriginal=0;
-    handles.complexTimeInvariant=0;
     
     %Show the main tab
     setVisibility(1,handles,hObject);
@@ -175,9 +165,9 @@ function iqrButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(2,:) = ParametersSpecification();%Open the window
+    handles.parameters(3,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(2,1));%Close it
+    close(handles.parameters(3,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -201,9 +191,9 @@ function modifiedZScoreButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(4,:) = ParametersSpecification();%Open the window
+    handles.parameters(5,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(4,1));%Close it
+    close(handles.parameters(5,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -215,9 +205,9 @@ function madButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(5,:) = ParametersSpecification();%Open the window
+    handles.parameters(6,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(5,1));%Close it
+    close(handles.parameters(6,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -228,9 +218,23 @@ function grubbsButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(3,:) = ParametersSpecification();%Open the window
+    handles.parameters(4,:) = ParametersSpecification();%Open the window
     
-    close(handles.parameters(3,1));%Close it
+    close(handles.parameters(4,1));%Close it
+    
+    % Update handles structure
+    guidata(hObject, handles);
+   
+    
+% --- Executes on button press in linearButton.
+function linearButton_Callback(hObject, eventdata, handles)
+% hObject    handle to linearButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles.parameters(2,:) = ParametersSpecification();%Open the window
+    
+    close(handles.parameters(2,1));%Close it
     
     % Update handles structure
     guidata(hObject, handles);
@@ -371,9 +375,10 @@ function fillmissingcheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of fillmissingcheckbox
 
-    handles.fillMissing = mod(handles.fillMissing+1,2);
-    set(handles.fillmissingcheckbox,'Value',handles.fillMissing);
-    if (handles.fillMissing)
+    %handles.fillMissing = mod(handles.fillMissing+1,2);
+    %set(handles.fillmissingcheckbox,'Value',handles.fillMissing);
+    %if (handles.fillMissing)
+    if (get(handles.fillmissingcheckbox, 'Value'))
         set(handles.missValsCountText,'enable','on');
         set(handles.methodText,'enable','on');
         set(handles.resampleDataCheckbox,'enable','on');        
@@ -432,7 +437,8 @@ function resampleDataCheckbox_Callback(hObject, ~, handles)
     handles.resampleData = handles.resampleData + 1;
     handles.resampleData = mod(handles.resampleData,2);
     
-    if (handles.resampleData) %Show text box to specify sampling period
+    %if (handles.resampleData) %Show text box to specify sampling period
+    if (get(handles.resampleDataCheckbox, 'Value'))
         set(handles.newSamplingPeriodText,'Enable','on');
         set(handles.samplingPeriodText,'Enable','on');
     else %Hide the box
@@ -451,8 +457,8 @@ function eucldistcheckbox_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of eucldistcheckbox
-    handles.euclidean=mod((handles.euclidean+1),2);
-    if (handles.euclidean == 1)
+    
+    if (get(handles.eucldistcheckbox,'Value'))
         handles.metrics = [handles.metrics 1];
     elseif (ismember(1,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
         handles.metrics = handles.metrics(handles.metrics ~= 1);
@@ -468,8 +474,8 @@ function differencecheckbox_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of differencecheckbox
-    handles.differenceToOriginal=mod((handles.differenceToOriginal+1),2);
-    if (handles.differenceToOriginal == 1)
+    
+    if (get(handles.differencecheckbox,'Value'))
         handles.metrics = [handles.metrics 2];
     elseif (ismember(2,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
         handles.metrics = handles.metrics(handles.metrics ~= 2);
@@ -486,8 +492,8 @@ function complextimecheckbox_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of complextimecheckbox
-    handles.complexTimeInvariant=mod((handles.complexTimeInvariant+1),2);
-    if (handles.complexTimeInvariant == 1)
+    
+    if (get(handles.complextimecheckbox,'Value'))
         handles.metrics = [handles.metrics 3];
     elseif (ismember(3,handles.metrics) == 1)%If we unselected the method we must remove it from the list of methods
         handles.metrics = handles.metrics(handles.metrics ~= 3);
@@ -505,8 +511,9 @@ function iqrcheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of iqrcheckbox
     
-    handles.iqr = mod((handles.iqr + 1),2);
-    if (handles.iqr == 1)
+    %handles.iqr = mod((handles.iqr + 1),2);
+    
+    if (get(handles.iqrcheckbox,'Value'))
         handles.model = [handles.model 2];
     elseif (ismember(2,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 2);
@@ -524,10 +531,9 @@ function sndcheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of sndcheckbox
     
-    handles.snd = mod((handles.snd + 1),2);
-    if (handles.snd == 1)
-        handles.model = [handles.model 1];
-    elseif (ismember(1,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+    if (get(handles.sndcheckbox,'Value'))
+        handles.model = [handles.model 0];
+    elseif (ismember(0,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 1);
     end
     
@@ -542,8 +548,7 @@ function madcheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of madcheckbox
     
-    handles.mad = mod((handles.mad + 1),2);
-    if (handles.mad == 1)
+    if (get(handles.madcheckbox,'Value'))
         handles.model = [handles.model 5];
         elseif (ismember(5,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 5);
@@ -560,8 +565,7 @@ function gurbbscheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of gurbbscheckbox
     
-    handles.grubbs = mod((handles.grubbs + 1),2);
-    if (handles.grubbs == 1)
+    if (get(handles.gurbbscheckbox,'Value'))
         handles.model = [handles.model 3];
     elseif (ismember(3,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 3);
@@ -578,10 +582,26 @@ function mzscorecheckbox_Callback(hObject, ~, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of mzscorecheckbox
     
-    handles.modifiedzscore = mod((handles.modifiedzscore + 1),2);
-    if (handles.modifiedzscore == 1)
+    if (get(handles.mzscorecheckbox,'Value'))
         handles.model = [handles.model 4];
     elseif (ismember(4,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
+        handles.model = handles.model(handles.model ~= 4);
+    end
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+% --- Executes on button press in linearMethodCheckbox.
+function linearMethodCheckbox_Callback(hObject, eventdata, handles)
+% hObject    handle to linearMethodCheckbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of linearMethodCheckbox
+
+    if (get(handles.linearMethodCheckbox,'Value'))
+        handles.model = [handles.model 1];
+    elseif (ismember(1,handles.model) == 1)%If we unselected the method we must remove it from the list of methods
         handles.model = handles.model(handles.model ~= 4);
     end
     
@@ -611,7 +631,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
         if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),ACCOMODATION_TYPE,0.85);
         else
-            j = handles.model(i);
+            j = handles.model(i) + 1;
             
             if (handles.parameters(j,4)==-1)
                 handles.parameters(j,4) = round(0.01*length(handles.t))-1;
