@@ -22,7 +22,7 @@ function varargout = Analyser(varargin)
 
 % Edit the above text to modify the response to help Analyser
 
-% Last Modified by GUIDE v2.5 19-Jan-2014 15:30:07
+% Last Modified by GUIDE v2.5 19-Jan-2014 20:26:41
 
 % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -740,8 +740,8 @@ function accommodate_bt_Callback(hObject, ~, handles)
     %%%
     handles.methodsName = {};
     
-    % MEU, tanto COPY PASTE dá-me CANCRO! Duas destas linhas podiam estar
-    % fora da cascata de elseifs!!!!!! e a cascata podia ser substituída
+    % MEU, tanto COPY PASTE dï¿½me CANCRO! Duas destas linhas podiam estar
+    % fora da cascata de elseifs!!!!!! e a cascata podia ser substituï¿½a
     % por um array lookup! I'm dying!
     for i=1:length(handles.model)
         if (handles.model(i) == 2)
@@ -1014,5 +1014,3 @@ function plotDifferenceSeries(hObject, handles)
 function save_file(fullpath,time,data)
     fullpath = char(fullpath)
     csvwrite(fullpath,  [ time data' ])
-
-

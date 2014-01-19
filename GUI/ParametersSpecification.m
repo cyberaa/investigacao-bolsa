@@ -65,6 +65,11 @@ function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
     set(handles.sndValue,'String',handles.temp_2(2));
     set(handles.sndHelpText,'String',handles.temp_2(3));
     
+    %Set Sliding window checked
+    set(handles.slidingWindowCheckbox,'Value',1);
+    set(handles.windowOverlap,'Visible','off');
+    set(handles.windowOverlapValue,'Visible','off');
+    
     handles.accommodationType = 'Linear';
     
     snd = get(handles.sndValue,'String');    
@@ -216,8 +221,6 @@ function cancel_bt_Callback(hObject, eventdata, handles)
     snd = str2double(snd);
     
     handles.output = [handles.figure1 snd 20 2 1];
-    
-    handles.output
     
     % Update handles structure
     guidata(hObject, handles);
