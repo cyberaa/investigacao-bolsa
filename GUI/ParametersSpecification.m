@@ -222,8 +222,6 @@ function cancel_bt_Callback(hObject, eventdata, handles)
     
     handles.output = [handles.figure1 snd 20 19 1];
     
-    handles.output
-    
     % Update handles structure
     guidata(hObject, handles);
     
