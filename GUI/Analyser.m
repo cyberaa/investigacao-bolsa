@@ -672,7 +672,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     for i=1:length(handles.model)
         
         j = handles.model(i) + 1;            
-        ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median
+        ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear
 
         if (handles.parameters(j,4)==-1)
             handles.parameters(j,4) = round(0.01*length(handles.t))-1;
