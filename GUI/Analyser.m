@@ -94,7 +94,6 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     setVisibility(1,handles,hObject);
     
     %Hide sampling period boxes
-    
     set(handles.missValsCountText,'enable','on');
     set(handles.methodText,'enable','on');
     set(handles.resampleDataCheckbox,'enable','on');        
@@ -103,7 +102,8 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     set(handles.newSamplingPeriodText,'enable','off');
     set(handles.samplingPeriodText,'enable','off'); 
     
-    
+    %Don't show the inputFile path
+    set(handles.filePathText,'String', '');
     
     % Choose default command line output for Analyser
     handles.output = hObject;
@@ -152,6 +152,7 @@ function inputFile_bt_Callback(hObject, ~, handles)
     
     if status == 0        
         errordlg(errorMessage,'Invalid File Content');
+        set(handles.filePathText,'String', '');
     else
         handles.t = t;    
         handles.data_miss = data;
@@ -160,25 +161,13 @@ function inputFile_bt_Callback(hObject, ~, handles)
         plot(handles.axes1,t,data,'b');
         title(handles.axes1,'Collected Data'); 
         legend(handles.axes1,'Original Series');
+        
+        %Set filePathText to show the path to the file
+        set(handles.filePathText,'String', fullpathname);
     end
     
     % Update handles structure
     guidata(hObject, handles);
-
-
-% --- Executes on button press in outputFile_bt.
-function outputFile_bt_Callback(hObject, ~, handles)
-% hObject    handle to outputFile_bt (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-    %%%
-    %%  FIXME FIXME FIXME
-    %%%
-    
-    % Update handles structure
-    guidata(hObject, handles);
-    
     
 % --- Executes on button press in iqrButton
 function iqrButton_Callback(hObject,~,handles)
