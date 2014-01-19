@@ -142,6 +142,10 @@ function inputFile_bt_Callback(hObject, ~, handles)
     [filename, pathname] = uigetfile({'*.csv','Comma Sperated Value (*.csv)'; '*.xls;*.xlsx', 'Microsoft Excel File (*.xls,*.xlsx)'},'Choose a File');
     fullpathname = [pathname filename];
     
+    if (pathname == 0 || filename == 0)
+        return;
+    end
+    
     [status,t, data] = get_data_from_file(fullpathname);
         
     errorMessage = 'File corrupted or with unexpected content\nValid files must consist of two rows or two columns, representing the time (first) and the data/samples (second). Use NaN to represent missing values';
