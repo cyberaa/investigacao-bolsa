@@ -22,7 +22,7 @@ function varargout = ParametersSpecification(varargin)
 
 % Edit the above text to modify the response to help ParametersSpecification
 
-% Last Modified by GUIDE v2.5 19-Jan-2014 02:54:31
+% Last Modified by GUIDE v2.5 19-Jan-2014 14:34:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,13 +59,18 @@ function ParametersSpecification_OpeningFcn(hObject, ~, handles, varargin)
     
     temp = varargin(1);
     
-    temp_2 = temp{1};
+    handles.temp_2 = temp{1};
     
-    set(handles.sndText,'String',temp_2(1));
-    set(handles.sndValue,'String',temp_2(2));
-    set(handles.sndHelpText,'String',temp_2(3));
+    set(handles.sndText,'String',handles.temp_2(1));
+    set(handles.sndValue,'String',handles.temp_2(2));
+    set(handles.sndHelpText,'String',handles.temp_2(3));
     
     handles.accommodationType = 'Linear';
+    
+    snd = get(handles.sndValue,'String');    
+    snd = str2double(snd);
+    
+    handles.output = [handles.figure1 snd 20 2 1];
 
     % Update handles structure
     guidata(hObject, handles);
@@ -83,9 +88,10 @@ function varargout = ParametersSpecification_OutputFcn(hObject, eventdata, handl
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = handles.output;
+    
+    varargout{1} = handles.output;
 
-uiresume(handles.figure1);%So the output function can be called
+    uiresume(handles.figure1);%So the output function can be called
 
 
 
@@ -200,8 +206,13 @@ function cancel_bt_Callback(hObject, eventdata, handles)
 % hObject    handle to cancel_bt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-    handles.output = [handles.figure1];
+    
+    snd = get(handles.sndValue,'String');    
+    snd = str2double(snd);
+    
+    handles.output = [handles.figure1 snd 20 2 1];
+    
+    handles.output
     
     % Update handles structure
     guidata(hObject, handles);
@@ -261,3 +272,18 @@ function accommodationTypeList_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+    handles.output = [];
+    
+    % Update handles structure
+    guidata(hObject, handles);
+    
+    delete(hObject);
