@@ -79,6 +79,8 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.results = [];%Stores the results to be presented to the user in the 3rd tab table
     handles.showModel = 0;%If we want to show the plots of the accommodated data
     handles.parameters = [];%Stores values for the parameters as selected by the user
+    handles.fileName = '';%Stores the root name of files saved
+    handles.directoryName = '';%Stores the direcotry of the saved files
     
     %Show the main tab
     setVisibility(1,handles,hObject);
@@ -651,6 +653,18 @@ function accommodate_bt_Callback(hObject, ~, handles)
         errordlg('Invalid parameters selected or data not pre-processed','No Data Processed');
         set(handles.filePathText,'String', '');
     end
+    
+    %Ask user if he/she wants to save the results in a file
+    resultFile = AskFile();   
+    
+    close(resultFile{1});%Close it
+     
+    handles.fileName = resultFile(2);
+    handles.directoryName = resultFile(3);
+    
+    handles.fileName
+    handles.directoryName
+    
 
     %outlier_locations = handles.outlier_locations';
     handles.data_fix_outliers = zeros(length(handles.model),length(handles.data_fix));
@@ -670,14 +684,16 @@ function accommodate_bt_Callback(hObject, ~, handles)
         %    [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
         %else
         
-            j = handles.model(i) + 1;            
-            ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
-            
-            if (handles.parameters(j,4)==-1)
-                handles.parameters(j,4) = round(0.01*length(handles.t))-1;
-            end
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
+        j = handles.model(i) + 1;            
+        ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
+
+        if (handles.parameters(j,4)==-1)
+            handles.parameters(j,4) = round(0.01*length(handles.t))-1;
+        end
+        [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
         %end
+        
+        
         
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
@@ -716,8 +732,6 @@ function accommodate_bt_Callback(hObject, ~, handles)
         plotDifferenceSeries(hObject, handles);
     end
     
-    
-    
     %%%
     %% Get methods - For now this will stay here... Maybe we could do this on the callback function where we select each method, however it would be
     %%               more difficult to implement this. Same goes to the metrics
@@ -726,14 +740,49 @@ function accommodate_bt_Callback(hObject, ~, handles)
     for i=1:length(handles.model)
         if (handles.model(i) == 2)
             handles.methodsName{length(handles.methodsName)+1} = 'IQR Method';
+            
+            if (strcmp('',handles.fileName) == 0)%Save File to Disk
+                name = strcat(handles.FileName,'IQR Method');
+                fullpath = [handles.directoryName name];
+                save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
+            end
+            
         elseif (handles.model(i) == 1)
             handles.methodsName{length(handles.methodsName)+1} = 'SND Method';
+            
+            if (strcmp('',handles.fileName) == 0)%Save File to Disk
+                name = strcat(handles.fileName,'SND Method');
+                fullpath = [handles.directoryName name];
+                save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
+            end
+            
         elseif (handles.model(i) == 4)
             handles.methodsName{length(handles.methodsName)+1} = 'Modified Z-Score';
+            
+            if (strcmp('',handles.fileName) == 0)%Save File to Disk
+                name = strcat(handles.fileName,'Modified Z-Score');
+                fullpath = [handles.directoryName name];
+                save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
+            end
+            
         elseif (handles.model(i) == 5)
             handles.methodsName{length(handles.methodsName)+1} = 'MAD Test';
+            
+            if (strcmp('',handles.fileName) == 0)%Save File to Disk
+                name = strcat(handles.fileName,'MAD Test');
+                fullpath = [handles.directoryName name];
+                save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
+            end
+            
         else
             handles.methodsName{length(handles.methodsName)+1} = 'Grubbs Test';
+            
+            if (strcmp('',handles.fileName) == 0)%Save File to Disk
+                name = strcat(handles.FileName,'Grubbs Test');
+                fullpath = [handles.directoryName name];
+                save_file(fullpath,handles.t_fix,handles.data_fix_outliers(i,:));
+            end
+            
         end
     end
     
@@ -744,6 +793,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
     
     % Update handles structure
     guidata(hObject, handles);
+
     
 
 % --- Plots the results of the Outlier's accommodation methods applied, as selected by the user
@@ -953,3 +1003,8 @@ function plotDifferenceSeries(hObject, handles)
     
     % Update handles structure
     guidata(hObject, handles);
+    
+    
+function save_file(fullpath,time,data)
+
+

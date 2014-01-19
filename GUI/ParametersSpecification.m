@@ -184,6 +184,11 @@ function ok_bt_Callback(hObject, ~, handles)
     if (get(handles.slidingWindowCheckbox,'Value'))
         windowOverlap = windowSize-1;
     end
+    
+    if (isnan(snd) || isnan(windowSize) || isnan(windowOverlap))%Alertar user input mal
+        errordlg('Invalid Parameters Values! Please insert numeric values for the Parameters','Invalid Parameters Values');
+        return ;
+    end
         
     handles.output = [handles.figure1 snd windowSize windowOverlap];
     
