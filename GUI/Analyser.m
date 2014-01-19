@@ -52,34 +52,21 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to Analyser (see VARARGIN)
 
-
-    %%%%
-    %%  FIXME FIXME!!!!!!!!
-    %%  FIXME FIXME!!!!!!!!
-    %%  FIXME FIXME!!!!!!!!
-    %%  FIXME FIXME!!!!!!!!
-    %%  FIXME FIXME!!!!!!!!
-    %%  FIXME FIXME!!!!!!!!
-    %%%%
     add_paths();
 
-    %FIXME: This next lines of code are just here for testing purposes, since
-    %we arent loading files dynamically into the workspace. Therefore, and to
-    %have something to show our mentors, we are going to "simulate" the data.
+    %Generate time series used in case user does not give us one
     handles.t=(0:500)';
     data = generate_time_series(-1,1,length(handles.t),-5,5);
     handles.data = data';
     handles.data_miss = add_missing(handles.data, 0.10);
     [handles.data_outliers,handles.outlier_locations]=add_outliers(handles.data, 0.15,std(handles.data)*1.15,std(handles.data)*1.15);
+    
     handles.data_fix_outliers = [];
     handles.dL = [];
     handles.dH = [];
-    handles.t_fix = 0;
+    handles.t_fix = 0;%Time vector correspondent to the time series without missing values
 
     handles.plotReferences = [];%Stores the plots computed by the GUI
-
-    %Load data into the table - FIXME this is temporary!
-    %set(handles.table,'Data',handles.data);
 
     %User decision in terms of algorithms and data resampling and filling missing values
     handles.iqr=0;
@@ -89,7 +76,8 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.snd=0;
     handles.resampleData = 0;
     handles.samplingPeriod = 0;
-    handles.fillMissing = 0;
+    handles.fillMissing = 1;
+    set(handles.fillmissingcheckbox,'Value',handles.fillMissing);%Check the fill missing checkbox
     handles.fillMissingMethod = 'Linear';
     handles.parameters = [];%Stores the parameters selected by the user
     handles.model = [];%Stores the methods chosen by the user
@@ -107,13 +95,14 @@ function Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
     
     %Hide sampling period boxes
     
-    set(handles.missValsCountText,'enable','off');
-    set(handles.methodText,'enable','off');
-    set(handles.resampleDataCheckbox,'enable','off');        
-    set(handles.linearmenu,'enable','off'); 
+    set(handles.missValsCountText,'enable','on');
+    set(handles.methodText,'enable','on');
+    set(handles.resampleDataCheckbox,'enable','on');        
+    set(handles.linearmenu,'enable','on'); 
         
     set(handles.newSamplingPeriodText,'enable','off');
-    set(handles.samplingPeriodText,'enable','off');  
+    set(handles.samplingPeriodText,'enable','off'); 
+    
     
     
     % Choose default command line output for Analyser
@@ -335,7 +324,7 @@ function go_bt_Callback(hObject, ~, handles)
     meanV = mean(handles.data); 
     stdV = std(handles.data);
     
-    %% FIXME: Validação das merdas aqui e erro caso não dê
+    %% FIXME: Validaï¿½ï¿½o das merdas aqui e erro caso nï¿½o dï¿½
     
     if validate_preprocessing_data() == 0
         %%FIXME Joca faz alguma merda aqui
@@ -393,6 +382,7 @@ function fillmissingcheckbox_Callback(hObject, ~, handles)
 % Hint: get(hObject,'Value') returns toggle state of fillmissingcheckbox
 
     handles.fillMissing = mod(handles.fillMissing+1,2);
+    set(handles.fillmissingcheckbox,'Value',handles.fillMissing);
     if (handles.fillMissing)
         set(handles.missValsCountText,'enable','on');
         set(handles.methodText,'enable','on');
