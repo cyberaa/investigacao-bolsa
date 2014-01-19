@@ -358,7 +358,16 @@ function go_bt_Callback(hObject, ~, handles)
         legend(handles.axes1,'Original Series');
     end
     
-    %FIXME: Maxi
+    if handles.resampleData
+        t_temp = handles.t_fix;
+        data_temp = handlesdata_fix;
+    else
+        [t_temp, data_temp] = fix_missing(handles.t,handles.data_miss,'linear');
+    end
+        
+    [~,outliers_detect,~,~] = accomodate_outliers(t_temp, data_temp, round(0.10*length(data_temp)), round(0.10*length(data_temp))-1,0,1,2.5);
+    
+    numbersOutliers = sum(outliers_detect);
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
     set(handles.mean,'String', ['Mean: ' num2str(meanV)]);
     set(handles.std,'String', ['Standard Deviation: ' num2str(stdV)]);
