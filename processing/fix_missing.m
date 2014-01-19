@@ -1,7 +1,7 @@
 function [t,data] = fix_missing(t, data, method, ts)    
     tser = timeseries(data,t);
     if nargin == 4
-        t = t(1) : ts : t(end);
+        t = (t(1) : ts : t(end))';
     end
     tser_fixed = resample(tser,t, method);
     data = tser_fixed.data;

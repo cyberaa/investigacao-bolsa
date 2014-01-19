@@ -165,7 +165,7 @@ function iqrButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(3,:) = ParametersSpecification('IQRM - Interquartile Range Multiplier',2.31,'Interquartile range multiplier. Recommended: 2.31');%Open the window
+    handles.parameters(3,:) = ParametersSpecification('IQRM - Interquartile Range Multiplier',2.31,'Texto de apoio');%Open the window
     
     close(handles.parameters(3,1));%Close it
     
@@ -178,7 +178,7 @@ function sndButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(1,:) = ParametersSpecification('SND - Standard Normal Deviation',2,'Standard Deviation multiplier. Recommended: 2, 2.5, 3');%Open the window
+    handles.parameters(1,:) = ParametersSpecification('SND - Standard Normal Deviation',2,'Texto de apoio');%Open the window
     
     close(handles.parameters(1,1));%Close it
     
@@ -191,7 +191,7 @@ function modifiedZScoreButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(5,:) = ParametersSpecification('Z-score Threshold',3.5,'Threshold with which each point os compared. Recommended: 3.5');%Open the window
+    handles.parameters(5,:) = ParametersSpecification('Z-score Threshold',3.5,'Texto de apoio');%Open the window
     
     close(handles.parameters(5,1));%Close it
     
@@ -205,7 +205,7 @@ function madButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(6,:) = ParametersSpecification('MADe Coefficient',3,'Multiplier for MAD values. Recommended: 2,3, 1.483');%Open the window
+    handles.parameters(6,:) = ParametersSpecification('MADe Coefficient',3,'Texto de apoio');%Open the window
     
     close(handles.parameters(6,1));%Close it
     
@@ -218,7 +218,7 @@ function grubbsButton_Callback(hObject,~,handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(4,:) = ParametersSpecification('Confidence',0.05,'Confidence to predict outlier. Recommended: 0.05, 0.25');%Open the window
+    handles.parameters(4,:) = ParametersSpecification('Confidence',0.05,'Texto de apoio');%Open the window
     
     close(handles.parameters(4,1));%Close it
     
@@ -232,7 +232,7 @@ function linearButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles.parameters(2,:) = ParametersSpecification('SND - Standard Normal Deviation',3,'Standard Deviation multiplier. Recommended: 2, 2.5, 3');%Open the window
+    handles.parameters(2,:) = ParametersSpecification('SND - Standard Normal Deviation',3,'Texto de apoio');%Open the window
     
     close(handles.parameters(2,1));%Close it
     
@@ -327,7 +327,7 @@ function go_bt_Callback(hObject, ~, handles)
     %Reset the axes
     cla(handles.axes1);
 
-    plot(handles.axes1,handles.t,handles.data_miss,'b');
+    plot(handles.axes1,handles.t,handles.data_miss,'b--');
     title(handles.axes1,'Collected Data'); 
     hold(handles.axes1,'on');
     
@@ -349,7 +349,7 @@ function go_bt_Callback(hObject, ~, handles)
             [handles.t_fix,handles.data_fix] = fix_missing(handles.t,handles.data_miss, interp_method(handles.fillMissingMethod));                
         end
         plot(handles.axes1,handles.t_fix,handles.data_fix,'r--');
-        legend(handles.axes1,'Original Series', 'Pre-Processed Series (to be Accomodated)');
+        legend(handles.axes1,'Original Series', 'Series With Missing Values Corrected');
         hold(handles.axes1,'on');
     else
         handles.t_fix = handles.t;
@@ -357,18 +357,16 @@ function go_bt_Callback(hObject, ~, handles)
         legend(handles.axes1,'Original Series');
     end
     
-    if handles.fillMissing && handles.resampleData
+    if handles.resampleData
         t_temp = handles.t_fix;
-        data_temp = handles.data_fix;
+        data_temp = handlesdata_fix;
     else
         [t_temp, data_temp] = fix_missing(handles.t,handles.data_miss,'linear');
     end
-        length(data_temp)
-        length(t_temp)
-        round(0.10*length(data_temp))
+        
     [~,outliers_detect,~,~] = accomodate_outliers(t_temp, data_temp, round(0.10*length(data_temp)), round(0.10*length(data_temp))-1,0,1,2.5);
     
-    numberOutliers = sum(outliers_detect);
+    numbersOutliers = sum(outliers_detect);
     set(handles.estnumoutliers,'String',['Estimated Number of Outliers: ' num2str(numberOutliers)]);
     set(handles.mean,'String', ['Mean: ' num2str(meanV)]);
     set(handles.std,'String', ['Standard Deviation: ' num2str(stdV)]);
@@ -627,7 +625,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     
-    if validate_accomodation_data(handles) == 0
+    if validate_accomodation_data(handlers) == 0
         errordlg('Invalid parameters selected or data not pre-processed','No Data Processed');
         set(handles.filePathText,'String', '');
     end
@@ -643,12 +641,9 @@ function accommodate_bt_Callback(hObject, ~, handles)
     
     for i=1:length(handles.model)
         
-        %SUPERFIXME: Joca, tinhas comentado estas merdas, o que fazia com
-        %que nada desse, porque efectivamente faltam os valores por
-        %defeito. Para já mantenho a linha com valores hardcoded, mas tens de tratar dos valores por defeito para se remover isto      
-        if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
-            [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),0,0.85);
-        else
+        %if (length(handles.parameters)<2) %User did not specify the parameters for the method, so we will use some default parmeters
+            %[handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,round(0.01*length(handles.t_fix)),round(0.01*length(handles.t_fix))-1,handles.model(i),ACCOMODATION_TYPE,0.85);
+        %else
             j = handles.model(i) + 1;
             ACCOMODATION_TYPE = handles.parameters(j,5); %0 = average ; 1 = linear; 2 = median JOCA FIXME
             
@@ -656,7 +651,7 @@ function accommodate_bt_Callback(hObject, ~, handles)
                 handles.parameters(j,4) = round(0.01*length(handles.t))-1;
             end
             [handles.data_fix_outliers(i,:),outliers(i,:),handles.dL(i,:),handles.dH(i,:)] = accomodate_outliers(handles.t_fix,handles.data_fix,handles.parameters(j,3),handles.parameters(j,4),handles.model(i),ACCOMODATION_TYPE,handles.parameters(j,2));
-        end
+        %end
         
         handles.results(i,1) = sum(outliers(i,:));
         handles.results(i,2) = max(handles.data_fix_outliers(i,:));
@@ -686,7 +681,6 @@ function accommodate_bt_Callback(hObject, ~, handles)
         end
     end
     
-
     
     %fprintf('Inserted %d outliers, found %d.\n', sum(outlier_locations), sum(sum(outliers)));
 
@@ -850,43 +844,17 @@ function valid=validate_preprocessing_data(handles)
     end
 
     
-    if handles.resampleData && ( handles.samplingPeriod > handles.t(end)-handles.t(1) || handles.samplingPeriod <= 0)
+    if handles.resampleData && handles.samplingPeriod < handles.t(end)-handles.t(1)
         valid = 0; return;
     end
     
     valid = 1;
     
 function valid = validate_accomodation_data(handles)
-
-    %Make sure we've got pre-processed data
     if isempty(handles.data_fix)
         valid = 0; return;
     end
     
-    %Make sure we've got at least something selected (is this right?
-    if isempty(handles.model)
-        valid = 0; return;
-    end
     
-    
-    for i=1:length(handles.model)
-        
-            % If the user hasn't set any parameters, it's okay, just move
-            % on (FIXME: Later on we can remove this if)
-            if (length(handles.parameters)<2)
-                continue;
-            end
-            j = handles.model(i) + 1;        
-            
-            % Check that the window is in the range ]0,N] : N is length of
-            % data
-            if handles.parameters(j,3) <= 0 || handles.parameters(j,3) > length(handles.data_fix)
-                valid = 0; return;
-            end
-            
-            % Check that the overlap is < window size and >= 0
-            if handles.parameters(j,4) > handles.parameters(j,3) || handles.parameters(j,4) <= 0
-                valid = 0; return;
-            end
-    end
-valid = 1;
+    valid = 1;
+
