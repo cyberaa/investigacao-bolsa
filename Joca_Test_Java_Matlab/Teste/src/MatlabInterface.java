@@ -71,8 +71,30 @@ public class MatlabInterface {
         }
     }
 
+    public String doPreprocessing(String filePath, String method){
+        return doPreprocessing(filePath, method,-1);
+    }
+
+    public String doPreprocessing(String filePath, String method, double ts){
+        try {
+            if (ts>0){
+                inArgs = new Object[3];
+                inArgs[2] = ts;
+            }
+            else
+                inArgs = new Object[2];
+            inArgs[0] = filePath;
+            inArgs[1] = method;
+            output = matlabClient.executeMatlabFunction("preprocessing",inArgs,1);
+            return (String)output[0];
+        } catch (JamalException e) {
+            return null;
+        }
+    }
+
     public boolean isValidFile(String filePath){
         try {
+            inArgs = new Object[1];
             inArgs[0] = filePath;
             output = matlabClient.executeMatlabFunction("get_data_from_file",inArgs,3);
             double[] status = (double[])output[0];
