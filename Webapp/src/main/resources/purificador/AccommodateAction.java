@@ -12,10 +12,11 @@ public class AccommodateAction  extends AJAXAction {
     int               windowSize;
     int               windowOverlap;
     double            methodArgument;
-    String            accommodationMethod;
+    int            accommodationMethod;
     int               method;
     String            resultingImagePNG;
     String            resultingOutputFilePath;
+    boolean             useSlidingWindow;
 
 
     public void setWindowSize(int windowSize) {
@@ -31,7 +32,7 @@ public class AccommodateAction  extends AJAXAction {
         this.methodArgument = methodArgument;
     }
 
-    public void setAccommodationMethod(String accommodationMethod) {
+    public void setAccommodationMethod(int accommodationMethod) {
         this.accommodationMethod = accommodationMethod;
     }
 
@@ -41,15 +42,36 @@ public class AccommodateAction  extends AJAXAction {
 
     public void doAjaxWork() {
         System.out.println(this);
-        String origPath = "/Users/jorl17/Pictures/capa.png";
+
+        MatlabInterface.AccommodateDataReturn ret;
+
+        if ( useSlidingWindow ) {
+            ret =  client.accomodateData(windowSize,windowSize-1,method,
+                                     accommodationMethod,methodArgument);
+        } else {
+            ret =  client.accomodateData(windowSize,windowOverlap,method,
+                                         accommodationMethod,methodArgument);
+        }
+
+
+        if ( ret == null ) {
+            ajaxSuccess(); return; //FIXME: testing
+            //ajaxFailure(); return;
+        }
+
+        String origPath = ret.graphicFilePath;//"/Users/jorl17/Pictures/capa.png";
         String imagesPath = getServletContext().getRealPath("images");
         String targetFileNamePlusSlash = "/" + new File(origPath).getName();
         //Utils.moveFile(origPath, imagesPath + targetFileNamePlusSlash);
-
         resultingImagePNG = "images"+ targetFileNamePlusSlash;
-        resultingOutputFilePath = "Hakuna Matata";
-        ajaxSuccess();
 
+        origPath = ret.accommodatedFile;
+        String filesPath = getServletContext().getRealPath("files");
+        targetFileNamePlusSlash = "/" + new File(origPath).getName();
+        //Utils.moveFile(origPath, filesPath + targetFileNamePlusSlash);
+        resultingOutputFilePath = "files" + targetFileNamePlusSlash;
+
+        ajaxSuccess();
     }
     public boolean isSuccess() {
         return super.isSuccess();
@@ -58,11 +80,12 @@ public class AccommodateAction  extends AJAXAction {
     @Override
     public String toString() {
         return "AccommodateAction{" +
-                "windowSize=" + windowSize +
-                ", windowOverlap=" + windowOverlap +
+                "method=" + method +
+                ", accommodationMethod=" + accommodationMethod +
                 ", methodArgument=" + methodArgument +
-                ", accommodationMethod='" + accommodationMethod + '\'' +
-                ", method='" + method + '\'' +
+                ", windowOverlap=" + windowOverlap +
+                ", windowSize=" + windowSize +
+                ", useSlidingWindow=" + useSlidingWindow +
                 '}';
     }
 
@@ -72,5 +95,8 @@ public class AccommodateAction  extends AJAXAction {
 
     public String getResultingOutputFilePath() {
         return resultingOutputFilePath;
+    }
+    public void setUseSlidingWindow(boolean useSlidingWindow) {
+        this.useSlidingWindow = useSlidingWindow;
     }
 }

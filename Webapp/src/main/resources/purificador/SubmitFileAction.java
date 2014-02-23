@@ -24,8 +24,8 @@ public class SubmitFileAction extends AJAXAction {
 
         System.out.println("Submitted file has path: "+ file.getPath() + ", name: "+filename);
 
-        client.setCurrentFile(file, filename);
-        ajaxSuccess();
+        setAjaxStatus(client.addFile(file, filename));
+        ajaxSuccess(); //FIXME: For debugging
 
     }
     public boolean isSuccess() {

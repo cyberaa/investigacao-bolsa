@@ -294,8 +294,8 @@
                 <div class="input-group">
                     <span class="input-group-addon">Accommodation Method:</span>
                     <select class="form-control" name="accommodationMethod">
-                        <option value="linear">Linear</option>
-                        <option value="zoh">Zero-Order Hold</option>
+                        <option value="1">Linear</option>
+                        <option value="0">Mean</option>
                     </select>
                 </div><br />
                 <div class="input-group" id="method_argument_box" style="display:none;">
@@ -315,7 +315,8 @@
                     </div><br />
                 </div>
                 <div class="input-group">
-                    <input type="checkbox" id="useSlidingWindow" value="true" onchange="revalidateMethodInput()">
+                    <input type="checkbox" name="useSlidingWindow" id="useSlidingWindow" value="true"
+                           onchange="revalidateMethodInput()">
                         &nbsp; Sliding Window
                     </input>
                 </div><br />
