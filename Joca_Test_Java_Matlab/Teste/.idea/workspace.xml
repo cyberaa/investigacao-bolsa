@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fde9c2d0-c64c-45a3-a176-8e01db734e59" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/Client.java" afterPath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/SubmitFileAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/pagina_inicial.jsp" afterPath="$PROJECT_DIR$/../../Webapp/src/main/webapp/pagina_inicial.jsp" />
     </list>
     <ignored path="Teste.iws" />
@@ -15,7 +13,7 @@
     <file path="/AccommodateAction.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134554637" ignored="false" />
     <file path="/a.dummy" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134272516" ignored="false" />
     <file path="/MatlabInterface.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134257429" ignored="false" />
-    <file path="/pagina_inicial.jsp" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393139019336" ignored="false" />
+    <file path="/pagina_inicial.jsp" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393139984338" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

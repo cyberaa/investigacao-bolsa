@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70f0c19a-5817-40da-a969-2a6cee427d2b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/purificador/Client.java" afterPath="$PROJECT_DIR$/src/main/resources/purificador/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" />
     </list>
     <ignored path="IdeaBroker.iws" />
@@ -17,7 +15,7 @@
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441489" ignored="false" />
     <file path="/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441856" ignored="false" />
     <file path="/fragment.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393101026022" ignored="false" />
-    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393139019336" ignored="false" />
+    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393139984154" ignored="false" />
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/viewideas.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393109399908" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/resources/purificador/AjaxAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393110524503" ignored="false" />
     <file path="/SubmitFileAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393138821463" ignored="false" />
@@ -88,7 +86,7 @@
       <file leaf-file-name="pagina_inicial.jsp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="128" column="38" selection-start="4909" selection-end="4909" vertical-scroll-proportion="0.5401662">
+            <state line="54" column="16" selection-start="1684" selection-end="1684" vertical-scroll-proportion="0.083102494">
               <folding />
             </state>
           </provider>
@@ -889,7 +887,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="38" selection-start="4909" selection-end="4909" vertical-scroll-proportion="0.5401662">
+        <state line="54" column="16" selection-start="1684" selection-end="1684" vertical-scroll-proportion="0.083102494">
           <folding />
         </state>
       </provider>

@@ -51,8 +51,10 @@
             var image = $('#output_image');
             image.attr('src',data.resultingImagePNG);
 
-            var link = $('#output_file');
-            link.attr('href',data.resultingOutputFilePath);
+            if ( $('#preprocessData').prop('checked') ) {
+                var link = $('#output_file');
+                link.attr('href',data.resultingOutputFilePath);
+            }
         }
 
         function onAccommodationFailure(data) {
