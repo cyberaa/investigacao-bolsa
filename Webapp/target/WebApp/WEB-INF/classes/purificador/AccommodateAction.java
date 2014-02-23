@@ -80,11 +80,12 @@ public class AccommodateAction  extends AJAXAction {
     @Override
     public String toString() {
         return "AccommodateAction{" +
-                "windowSize=" + windowSize +
-                ", windowOverlap=" + windowOverlap +
+                "method=" + method +
+                ", accommodationMethod=" + accommodationMethod +
                 ", methodArgument=" + methodArgument +
-                ", accommodationMethod='" + accommodationMethod + '\'' +
-                ", method='" + method + '\'' +
+                ", windowOverlap=" + windowOverlap +
+                ", windowSize=" + windowSize +
+                ", useSlidingWindow=" + useSlidingWindow +
                 '}';
     }
 

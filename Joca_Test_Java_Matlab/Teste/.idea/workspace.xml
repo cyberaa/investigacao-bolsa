@@ -2,43 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fde9c2d0-c64c-45a3-a176-8e01db734e59" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/css/banner.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/css/clouds.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/css/login.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/css/simple-sidebar.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/css/banner.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/css/clouds.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/css/login.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/css/simple-sidebar.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/Client.class" afterPath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/Client.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/Client.class" afterPath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/Client.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/SubmitFileAction.class" afterPath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/SubmitFileAction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/SubmitFileAction.class" afterPath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/SubmitFileAction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp.war" afterPath="$PROJECT_DIR$/../../Webapp/target/WebApp.war" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/AccommodateAction.java" afterPath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/AccommodateAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/Client.java" afterPath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/Client.java" afterPath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/Client.java" afterPath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/SubmitFileAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/../../Webapp/target/WebApp/WEB-INF/classes/purificador/SubmitFileAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/../../Webapp/target/classes/purificador/SubmitFileAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/src/main/webapp/pagina_inicial.jsp" afterPath="$PROJECT_DIR$/../../Webapp/src/main/webapp/pagina_inicial.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Webapp/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../Webapp/.idea/workspace.xml" />
     </list>
     <ignored path="Teste.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393132784600" ignored="false" />
     <file path="$PROJECT_DIR$/../../Webapp/src/main/resources/purificador/MatlabInterface.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134277598" ignored="false" />
-    <file path="/Client.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393133316160" ignored="false" />
-    <file path="/SubmitFileAction.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393133644315" ignored="false" />
+    <file path="/Client.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393138375575" ignored="false" />
+    <file path="/SubmitFileAction.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393138821463" ignored="false" />
     <file path="/AccommodateAction.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134554637" ignored="false" />
     <file path="/a.dummy" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134272516" ignored="false" />
     <file path="/MatlabInterface.java" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134257429" ignored="false" />
-    <file path="/pagina_inicial.jsp" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393134642994" ignored="false" />
+    <file path="/pagina_inicial.jsp" changelist="fde9c2d0-c64c-45a3-a176-8e01db734e59" time="1393139019336" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

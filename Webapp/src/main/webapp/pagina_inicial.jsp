@@ -69,17 +69,20 @@
             return !isNaN(input) && parseInt(input) > 0;
         }
 
-        function onSubmitFileSuccess() {
+        function onSubmitFileSuccess(data) {
             var button =$('#submit_button');
             button.addClass('btn-success').removeClass('btn-info').removeClass('btn-danger');
             button.text('Valid File');
             $('#method_selection_panel').show();
+            var getfilebtn=$('#output_pre_processed_file');
+            getfilebtn.show();
+            getfilebtn.attr('href', data.outputFilePath);
         }
 
-        function onSubmitFileFailure() {
+        function onSubmitFileFailure(data) {
             var button =$('#submit_button');
             button.addClass('btn-danger').removeClass('btn-info');
-            button.text('Invalid or corrupt file');
+            button.text(data.errorMsg);
         }
 
         function detectionMethodSelected() {
@@ -109,6 +112,57 @@
             method_argument_text_box.text(argument_name);
             method_argument_recommendations_box.attr("placeholder", argument_recommendations);
             revalidateMethodInput();
+        }
+
+        function preprocessingAreaChanged() {
+            var fillMissingValues = $('#fillInMissingValues').prop('checked');
+            var resample = $('#resampleEnabled').prop('checked');
+            var ts = $('#resample_period').val();
+            var missingValuesMethodsArea = $('#missingValueFillingArea');
+            var resamplingArea = $('#resamplingArea');
+            var preprocessData = $('#preprocessData').prop('checked');
+            var proprocessingArea = $('#preprocessing_area');
+            var outputFileBtn = $('#output_pre_processed_file');
+
+            outputFileBtn.hide();
+            $('#method_selection_panel').hide();
+            $('#result_panel').hide();
+            if ( preprocessData ) {
+                proprocessingArea.show();
+            } else {
+                proprocessingArea.hide();
+            }
+
+            if ( fillMissingValues ) {
+                missingValuesMethodsArea.show();
+            } else {
+                missingValuesMethodsArea.hide();
+            }
+
+            if ( resample ) {
+                resamplingArea.show();
+            } else {
+                resamplingArea.hide();
+            }
+
+            if ( preprocessData && resample && !isValidPositiveNum(ts)) {
+                var button =$('#submit_button');
+                button.addClass('btn-warning').removeClass('btn-info').removeClass('btn-danger').removeClass('btn-success');
+                button.prop('disabled',true);
+                button.text('Invalid Parameters');
+            } else {
+                if( gLastSelectedFile.length ) {
+                    var button =$('#submit_button');
+                    button.prop('disabled',false);
+                    button.addClass('btn-info').removeClass('btn-warning').removeClass('btn-danger').removeClass('btn-success');
+                    button.text('Ready to Submit');
+                } else {
+                    var button =$('#submit_button');
+                    button.addClass('btn-warning').removeClass('btn-info').removeClass('btn-danger').removeClass('btn-success');
+                    button.prop('disabled',true);
+                    button.text('No file selected');
+                }
+            }
         }
 
         function revalidateMethodInput() {
@@ -144,6 +198,7 @@
     }
     </script>
     <script>
+        gLastSelectedFile="";
         $(document)
                 .on('change', '.btn-file :file', function() {
                     $('#method_selection_panel').hide();
@@ -157,6 +212,7 @@
             $('#submit_button').prop('disabled',true);
             $('#useSlidingWindow').prop('checked', true);
             detectionMethodSelected();
+            preprocessingAreaChanged();
             $("form#method_selection").submit(function(){
 
                 var formData = new FormData($(this)[0]);
@@ -204,10 +260,10 @@
                     async: true,
                     success: function (data) {
                         if ( data.success ) {
-                            onSubmitFileSuccess();
+                            onSubmitFileSuccess(data);
                         } else {
                             console.log(data);
-                            onSubmitFileFailure();
+                            onSubmitFileFailure(data);
                         }
 
                     },
@@ -221,24 +277,14 @@
             $('#method_selection_panel').hide();
             $('#result_panel').hide();
             $('.btn-file :file').on('fileselect', function(event, label) {
+                gLastSelectedFile = label;
                 $('#method_selection_panel').hide();
                 $('#result_panel').hide();
                 var input = $(this).parents('.input-group').find(':text'),
                         log = label;
 
                 input.val(log);
-                if( log.length ) {
-                    var button =$('#submit_button');
-                    button.prop('disabled',false);
-                    button.addClass('btn-info').removeClass('btn-warning').removeClass('btn-danger');
-                    button.text('Ready to Submit');
-                } else {
-                    var button =$('#submit_button');
-                    button.addClass('btn-warning').removeClass('btn-info').removeClass('btn-danger');
-                    button.prop('disabled',true);
-                    button.text('No file selected');
-                }
-
+                preprocessingAreaChanged();
             });
         });
     </script>
@@ -252,11 +298,49 @@
 
 <div class="col-sm-8 col-md-offset-2" id="methods_area" >
     <div class="panel panel-success" style="text-align: center">
-        <div class="panel-heading">Input file selection</div>
+        <div class="panel-heading">Input file selection & Pre-processing</div>
         <div class="panel-body">
             <form id="inputfiledata" method="post" enctype="multipart/form-data" action="submitfile.action">
                 <h2>Select an input file</h2>
                 <p>Valid formats: .csv, .xls, .xlsx, with two rows or columns (time and data)</p>
+                <p>If you choose the pre-process the data, you can download the pre-processed file, which will be
+                   used when applying the methods</p>
+                <div class="input-group">
+
+                    <input type="checkbox"  name="preprocessData" id="preprocessData" value="true"
+                           onchange="preprocessingAreaChanged()">
+                    &nbsp; Pre-Process the data
+                    </input>
+                </div>
+                <div id="preprocessing_area" style="padding-left:50px;">
+                <div class="input-group">
+
+                    <input type="checkbox"  name="fillInMissingValues" id="fillInMissingValues" value="true"
+                           onchange="preprocessingAreaChanged()">
+                    &nbsp; Fill in Missing values
+                    </input>
+                </div>
+                <div class="input-group" style="padding-left:50px;" id="missingValueFillingArea">
+                    <br />
+                    <span class="input-group-addon">Missing Value Replacement Method:</span>
+                    <select class="form-control" id="missingValueFillingMethod" name="missingValueFillingMethod">
+                        <option value="linear">Linear</option>
+                        <option value="zoh">Zero-Order Hold</option>
+                    </select>
+                </div><br />
+                <div class="input-group">
+                    <input type="checkbox" name="resampleEnabled" id="resampleEnabled" value="true"
+                           onchange="preprocessingAreaChanged()">
+                    &nbsp; Resample data
+                    </input>
+                </div>
+                <div class="input-group" style="padding-left:50px;"  id="resamplingArea"><br />
+                    <span class="input-group-addon">Resampling period:</span>
+                    <input type="text" class="form-control" placeholder="Value"
+                           id="resample_period" name="resamplePeriod"
+                           onkeyup="preprocessingAreaChanged()">
+                </div></div>
+                    <br />
                 <div class="input-group">
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -265,11 +349,14 @@
                             </span>
                         </span>
                         <input type="text" class="form-control" readonly=""
-                               value="No file selected" style="width:450px;" name="filename"> &nbsp;
+                               value="No file selected" style="width:250px;" name="filename"> &nbsp;
                         <button id="submit_button" class="btn btn-warning btn-lg" onclick="doSubmitFile()">No file
                             selected</button>
-                        <button type="submit" id="submitIt" style="display:none"></button>
+                        <button type="submit" id="submitIt" style="display:none"></button>&nbsp;
+                        <a href="#" type="button" class="btn btn-primary btn-lg" id="output_pre_processed_file">
+                            Get Pre-Processed File</a>
                     </div>
+
                 </div>
             </form>
         </div>
@@ -280,6 +367,8 @@
             <form id="method_selection" method="post" enctype="multipart/form-data" action="accommodate.action"
                   role="form" >
                 <h2 >Select Outlier Detection and Accommodation methods</h2>
+                <p>The data from the previous section is used (if you have pre-processed data,
+                    it is used instead of the raw supplied data)</p>
                 <div class="input-group">
                     <span class="input-group-addon">Outlier Detection Method: </span>
                     <select onchange="detectionMethodSelected()" class="form-control" name="method" id="method">

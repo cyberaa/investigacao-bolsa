@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="70f0c19a-5817-40da-a969-2a6cee427d2b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/css/banner.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/css/bootstrap-dialog.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/css/clouds.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/css/login.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/css/simple-sidebar.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java" afterPath="$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/purificador/Client.java" afterPath="$PROJECT_DIR$/src/main/resources/purificador/Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" afterPath="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Joca_Test_Java_Matlab/Teste/.idea/vcs.xml" afterPath="$PROJECT_DIR$/../Joca_Test_Java_Matlab/Teste/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Joca_Test_Java_Matlab/Teste/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Joca_Test_Java_Matlab/Teste/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="IdeaBroker.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,12 +17,12 @@
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441489" ignored="false" />
     <file path="/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441856" ignored="false" />
     <file path="/fragment.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393101026022" ignored="false" />
-    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393134642995" ignored="false" />
+    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393139019336" ignored="false" />
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/viewideas.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393109399908" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/resources/purificador/AjaxAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393110524503" ignored="false" />
-    <file path="/SubmitFileAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393133644315" ignored="false" />
+    <file path="/SubmitFileAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393138821463" ignored="false" />
     <file path="/AccommodateAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393134554758" ignored="false" />
-    <file path="/Client.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393133316161" ignored="false" />
+    <file path="/Client.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393138375575" ignored="false" />
     <file path="/Utils.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393131170481" ignored="false" />
     <file path="/MatlabInterface.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393134257429" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -94,10 +85,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pagina_inicial.jsp" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="pagina_inicial.jsp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="296" column="45" selection-start="12141" selection-end="12141" vertical-scroll-proportion="-7.0416665">
+            <state line="128" column="38" selection-start="4909" selection-end="4909" vertical-scroll-proportion="0.5401662">
               <folding />
             </state>
           </provider>
@@ -106,7 +97,7 @@
       <file leaf-file-name="MatlabInterface.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/MatlabInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="24" selection-start="603" selection-end="603" vertical-scroll-proportion="0.0">
+            <state line="88" column="18" selection-start="2671" selection-end="2671" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -115,17 +106,28 @@
       <file leaf-file-name="SubmitFileAction.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="34" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
+            <state line="61" column="57" selection-start="2002" selection-end="2002" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccommodateAction.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="AccommodateAction.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="18" selection-start="2645" selection-end="2645" vertical-scroll-proportion="0.33179724">
+            <state line="64" column="73" selection-start="1826" selection-end="2122" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Client.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="5" selection-start="2488" selection-end="2488" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -195,11 +197,11 @@
         <option value="$PROJECT_DIR$/src/main/resources/purificador/AccomodateAction.java" />
         <option value="$PROJECT_DIR$/src/main/resources/struts.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/purificador/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/purificador/MatlabInterface.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java" />
         <option value="$PROJECT_DIR$/src/main/resources/purificador/Client.java" />
         <option value="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/purificador/MatlabInterface.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" />
-        <option value="$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java" />
       </list>
     </option>
   </component>
@@ -507,6 +509,13 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Remote" singleton="true">
+      <JSRemoteDebuggerConfigurationSettings>
+        <option name="engineId" />
+        <option name="fileUrl" />
+      </JSRemoteDebuggerConfigurationSettings>
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -834,13 +843,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="19" selection-start="397" selection-end="397" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="0" selection-start="373" selection-end="762" vertical-scroll-proportion="0.0">
@@ -855,30 +857,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="296" column="45" selection-start="12141" selection-end="12141" vertical-scroll-proportion="-7.0416665">
+        <state line="64" column="73" selection-start="1826" selection-end="2122" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/MatlabInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="24" selection-start="603" selection-end="603" vertical-scroll-proportion="0.0">
+        <state line="88" column="18" selection-start="2671" selection-end="2671" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="34" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
+        <state line="61" column="57" selection-start="2002" selection-end="2002" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="18" selection-start="2645" selection-end="2645" vertical-scroll-proportion="0.33179724">
+        <state line="67" column="5" selection-start="2488" selection-end="2488" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="38" selection-start="4909" selection-end="4909" vertical-scroll-proportion="0.5401662">
           <folding />
         </state>
       </provider>
