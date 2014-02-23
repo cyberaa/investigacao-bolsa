@@ -10,17 +10,22 @@
 
     <package name="basicstruts2" extends="struts-default">
 
-    <!--<action name="">
-        <result type="redirect">login.jsp</result>
-    </action>-->
+    <action name="">
+        <result type="redirect">pagina_inicial.jsp</result>
+    </action>
 
-    <action name="HelloWorld" class="tutorial.HelloWorld">
-        <result>/HelloWorld.jsp</result>
+    <action name="HelloWorld" class="purificador.HelloWorld" method="execute">
+        <result>/pagina_inicial.jsp</result>
     </action>
 
     </package>
 
     <package name="default" namespace="/" extends="json-default">
+        <action name="submitfile" class="purificador.SubmitFileAction" method="execute">
+            <result type="json"></result>
+        </action>
+        <action name="acommodation" class="purificador.AccommodateAction" method="execute">
+            <result type="json"></result>
+        </action>
     </package>
-
 </struts>
