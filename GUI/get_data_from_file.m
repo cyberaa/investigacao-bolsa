@@ -21,15 +21,15 @@ function [status,t,data] = get_data_from_file (path)
 end
 
 function [status,filedata] = parse_file(path)
-    [~, ~, ext] = fileparts(path);
+    [ignored1, ignored2, ext] = fileparts(path);
     if strcmp(ext,'.csv')        
         filedata = csvread(path);
         status = 1;
     elseif strcmp(ext,'.xls') 
-        [filedata,~,~] = xlsread(path);
+        [filedata,ingored1,ignored2] = xlsread(path);
         status = 1;
     elseif strcmp(ext,'.xlsx') 
-        [filedata,~,~] = xlsread(path);
+        [filedata,ingored1,ingored2] = xlsread(path);
         status = 1;
     else
         status = 0;

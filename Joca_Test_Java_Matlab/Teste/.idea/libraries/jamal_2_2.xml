@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="jamal-2.2">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../investigacao-bolsa/jamal-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../jamal-2.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../investigacao-bolsa/jamal-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../jamal-2.2.jar!/" />
     </SOURCES>
   </library>
 </component>
