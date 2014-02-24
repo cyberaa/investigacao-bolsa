@@ -51,10 +51,8 @@
             var image = $('#output_image');
             image.attr('src',data.resultingImagePNG);
 
-            if ( $('#preprocessData').prop('checked') ) {
-                var link = $('#output_file');
-                link.attr('href',data.resultingOutputFilePath);
-            }
+            var link = $('#output_file');
+            link.attr('href',data.resultingOutputFilePath);
         }
 
         function onAccommodationFailure(data) {
@@ -68,7 +66,7 @@
         }
 
         function isValidPositiveInt(input) {
-            return !isNaN(input) && parseInt(input) > 0;
+            return !isNaN(input) && parseInt(input) > 0 && (parseFloat(input)-parseInt(input))==0;
         }
 
         function onSubmitFileSuccess(data) {
@@ -76,9 +74,12 @@
             button.addClass('btn-success').removeClass('btn-info').removeClass('btn-danger');
             button.text('Valid File');
             $('#method_selection_panel').show();
-            var getfilebtn=$('#output_pre_processed_file');
-            getfilebtn.show();
-            getfilebtn.attr('href', data.outputFilePath);
+
+            if ( $('#preprocessData').prop('checked') ) {
+                var getfilebtn=$('#output_pre_processed_file');
+                getfilebtn.show();
+                getfilebtn.attr('href', data.outputFilePath);
+            }
         }
 
         function onSubmitFileFailure(data) {

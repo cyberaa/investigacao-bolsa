@@ -15,10 +15,10 @@
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441489" ignored="false" />
     <file path="/sidebar.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393112441856" ignored="false" />
     <file path="/fragment.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393101026022" ignored="false" />
-    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393139984154" ignored="false" />
+    <file path="/pagina_inicial.jsp" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393170718828" ignored="false" />
     <file path="$PROJECT_DIR$/../../projecto-sd/webapp/IdeaBroker/src/main/webapp/js/viewideas.js" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393109399908" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/resources/purificador/AjaxAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393110524503" ignored="false" />
-    <file path="/SubmitFileAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393138821463" ignored="false" />
+    <file path="/SubmitFileAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393170783059" ignored="false" />
     <file path="/AccommodateAction.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393134554758" ignored="false" />
     <file path="/Client.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393138375575" ignored="false" />
     <file path="/Utils.java" changelist="70f0c19a-5817-40da-a969-2a6cee427d2b" time="1393131170481" ignored="false" />
@@ -83,10 +83,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pagina_inicial.jsp" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="pagina_inicial.jsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="16" selection-start="1684" selection-end="1684" vertical-scroll-proportion="0.083102494">
+            <state line="68" column="94" selection-start="2227" selection-end="2227" vertical-scroll-proportion="8.375">
               <folding />
             </state>
           </provider>
@@ -101,10 +101,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SubmitFileAction.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="SubmitFileAction.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="57" selection-start="2002" selection-end="2002" vertical-scroll-proportion="0.0">
+            <state line="55" column="27" selection-start="1582" selection-end="1582" vertical-scroll-proportion="0.08759124">
               <folding />
             </state>
           </provider>
@@ -198,8 +198,8 @@
         <option value="$PROJECT_DIR$/src/main/resources/purificador/MatlabInterface.java" />
         <option value="$PROJECT_DIR$/src/main/resources/purificador/AccommodateAction.java" />
         <option value="$PROJECT_DIR$/src/main/resources/purificador/Client.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp" />
+        <option value="$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java" />
       </list>
     </option>
   </component>
@@ -769,13 +769,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/AJAXAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="34" selection-start="734" selection-end="734" vertical-scroll-proportion="0.23170732">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/ClientAction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="33" selection-start="815" selection-end="815" vertical-scroll-proportion="0.30487806">
@@ -869,13 +862,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="57" selection-start="2002" selection-end="2002" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="5" selection-start="2488" selection-end="2488" vertical-scroll-proportion="0.0">
@@ -885,9 +871,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavascriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="210" selection-end="210" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pagina_inicial.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="16" selection-start="1684" selection-end="1684" vertical-scroll-proportion="0.083102494">
+        <state line="68" column="94" selection-start="2227" selection-end="2227" vertical-scroll-proportion="8.375">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/purificador/SubmitFileAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="27" selection-start="1582" selection-end="1582" vertical-scroll-proportion="0.08759124">
           <folding />
         </state>
       </provider>
